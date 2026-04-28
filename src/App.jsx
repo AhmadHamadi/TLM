@@ -720,7 +720,8 @@ function Testimonials() {
       quote: 'These guys actually understand contractors. Our Google Ads were bleeding money before. Now we are booking high-ticket HVAC jobs at a fraction of the cost per lead. Straight shooters.',
       name:  'Saif Sabeeh',
       role:  'Owner, Ikad Mechanical HVAC',
-      where: 'HVAC · Heating & Cooling',
+      where: 'ikad.ca',
+      site:  'https://ikad.ca/',
       initials: 'SS',
       bg:    'bg-brand'
     },
