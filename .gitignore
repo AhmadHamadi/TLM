@@ -1,5 +1,8 @@
 node_modules
 dist
+
+# TLMportal is a separate git repo; parent repo should not track it
+TLMportal/
 .DS_Store
 .env
 .env.local
