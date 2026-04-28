@@ -313,7 +313,7 @@ function Hero() {
 
             <motion.p variants={fadeUp} className="mt-6 text-lg text-slate1 max-w-xl leading-relaxed">
               We build high-converting websites, run Google Ads campaigns, and dominate local SEO so
-              contractors book more profitable jobs — not just rack up clicks.
+              contractors book more profitable jobs, not just rack up clicks.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
@@ -498,7 +498,7 @@ function GBPBeforeAfter() {
         <div className="relative bg-soft">
           <img
             src="/gbpbefore.png"
-            alt="Google search before — Seven Stones Landscape with low visibility, no photos, only 9 reviews"
+            alt="Google search before: Seven Stones Landscape with low visibility, no photos, only 9 reviews"
             className="block w-full h-auto"
             loading="lazy"
           />
@@ -540,7 +540,7 @@ function GBPBeforeAfter() {
         <div className="relative bg-soft">
           <img
             src="/gbpafter.png"
-            alt="Google search after — Seven Stones Landscape ranked Map Pack #1 with 247 reviews and 80+ photos"
+            alt="Google search after: Seven Stones Landscape ranked Map Pack #1 with 247 reviews and 80+ photos"
             className="block w-full h-auto"
             loading="lazy"
           />
@@ -573,7 +573,7 @@ function AdsBeforeAfter() {
       >
         <img
           src="/googlebefore.png"
-          alt="Google Ads before — stuck at position 4, $92 per lead, 1.1% click-through rate"
+          alt="Google Ads before: stuck at position 4, $92 per lead, 1.1% click-through rate"
           className="block w-full h-auto"
           loading="lazy"
         />
@@ -588,7 +588,7 @@ function AdsBeforeAfter() {
         <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-brand via-blue to-brand z-10" />
         <img
           src="/googleafter.png"
-          alt="Google Ads after — top of page at position 1, $26 per lead, 7.8% click-through rate"
+          alt="Google Ads after: top of page at position 1, $26 per lead, 7.8% click-through rate"
           className="block w-full h-auto"
           loading="lazy"
         />
@@ -612,7 +612,7 @@ function Results() {
             <span className="text-brand">What Better Marketing Should Look Like</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-5 text-white/70 text-lg">
-            Three things every contractor needs working together — your website, your Google Business Profile, and your Google Ads.
+            Three things every contractor needs working together: your website, your Google Business Profile, and your Google Ads.
           </motion.p>
         </motion.div>
 
@@ -645,7 +645,7 @@ function Results() {
             <motion.h3 variants={fadeUp} className="h-display text-2xl md:text-3xl">
               From buried on page 2 → owning the local map pack
             </motion.h3>
-            <motion.p variants={fadeUp} className="mt-2 text-white/65">More photos, more reviews, optimized categories — all the things competitors ignore.</motion.p>
+            <motion.p variants={fadeUp} className="mt-2 text-white/65">More photos, more reviews, optimized categories. All the things competitors ignore.</motion.p>
           </motion.div>
           <GBPBeforeAfter />
         </div>
@@ -662,7 +662,7 @@ function Results() {
             <motion.h3 variants={fadeUp} className="h-display text-2xl md:text-3xl">
               From wasted spend at position 4 → top-of-page with a fraction of the cost
             </motion.h3>
-            <motion.p variants={fadeUp} className="mt-2 text-white/65">Better quality score, better ad copy, better targeting — built around homeowners who buy.</motion.p>
+            <motion.p variants={fadeUp} className="mt-2 text-white/65">Better quality score, better ad copy, better targeting, built around homeowners who buy.</motion.p>
           </motion.div>
           <AdsBeforeAfter />
         </div>
@@ -717,7 +717,7 @@ function Testimonials() {
       bg:    'bg-blue'
     },
     {
-      quote: 'These guys actually understand contractors. Our Google Ads were bleeding money before — now we are booking high-ticket HVAC jobs at a fraction of the cost per lead. Straight shooters.',
+      quote: 'These guys actually understand contractors. Our Google Ads were bleeding money before. Now we are booking high-ticket HVAC jobs at a fraction of the cost per lead. Straight shooters.',
       name:  'Saif Sabeeh',
       role:  'Owner, Ikad Mechanical HVAC',
       where: 'HVAC · Heating & Cooling',
@@ -746,7 +746,7 @@ function Testimonials() {
             {[1,2,3,4,5].map(i => <Star key={i} className="h-5 w-5 fill-gReview text-gReview" />)}
           </div>
           <span className="text-ink font-semibold">5.0</span>
-          <span className="text-slate2">— from 27+ verified Google reviews</span>
+          <span className="text-slate2">from 27+ verified Google reviews</span>
         </motion.div>
       </motion.div>
 
@@ -844,10 +844,10 @@ function Services() {
     { icon: Target,             title: 'Google Ads for Contractors',   benefit: 'Target homeowners actively searching for your service and turn clicks into quote requests.', tone: 'brand' },
     { icon: Layout,             title: 'Contractor Website Design',     benefit: 'Fast, modern websites built to convert visitors into booked estimates.',                  tone: 'blue'  },
     { icon: Search,             title: 'Local SEO',                     benefit: 'Rank for high-intent local searches like "concrete contractor near me."',                tone: 'blue'  },
-    { icon: MapPin,             title: 'Google Business Profile',       benefit: 'Dominate the map pack — more reviews, more calls, more direction requests.',             tone: 'brand' },
+    { icon: MapPin,             title: 'Google Business Profile',       benefit: 'Dominate the map pack. More reviews, more calls, more direction requests.',             tone: 'brand' },
     { icon: Sparkles,           title: 'AI Search Optimization',        benefit: 'Show up in ChatGPT, Google AI Overviews, and Perplexity when homeowners ask.',           tone: 'brand' },
     { icon: Zap,                title: 'Landing Pages',                 benefit: 'Service-specific landing pages built to convert paid traffic into estimates.',          tone: 'blue'  },
-    { icon: Phone,              title: 'Call & Lead Tracking',          benefit: 'See every call, form, and lead source — and know which campaigns book real jobs.',     tone: 'blue'  },
+    { icon: Phone,              title: 'Call & Lead Tracking',          benefit: 'See every call, form, and lead source, and know which campaigns book real jobs.',     tone: 'blue'  },
     { icon: BarChart3,          title: 'Conversion Optimization',       benefit: 'We test offers, headlines, and forms to squeeze more leads from the same traffic.',    tone: 'brand' }
   ];
 
@@ -900,11 +900,11 @@ function Services() {
 function WhyUs() {
   const points = [
     { icon: Users,         t: 'Built specifically for contractors',     d: 'Not law firms, not e-commerce. Just trades.' },
-    { icon: Target,        t: 'We chase booked jobs',                   d: 'Calls, forms, estimates, and revenue — that\'s the scorecard.' },
+    { icon: Target,        t: 'We chase booked jobs',                   d: 'Calls, forms, estimates, and revenue. That\'s the scorecard.' },
     { icon: Layout,        t: 'Buyer-intent landing pages',             d: 'Pages designed for homeowners who are ready to spend.' },
     { icon: BarChart3,     t: 'Reduced ad waste',                       d: 'Negative keywords, geo-targeting, and quality-score tuning.' },
     { icon: MapPin,        t: 'Local SEO that ranks',                   d: 'Service area pages, citations, and review velocity.' },
-    { icon: ShieldCheck,   t: 'Tracking installed before launch',       d: 'Calls, forms, conversions — everything attributed.' },
+    { icon: ShieldCheck,   t: 'Tracking installed before launch',       d: 'Calls, forms, conversions. Everything attributed.' },
     { icon: ClipboardList, t: 'Reporting tied to revenue',              d: 'No vanity metrics. Just the numbers that pay for trucks.' }
   ];
 
@@ -918,7 +918,7 @@ function WhyUs() {
             <span className="text-blue">We Chase Jobs.</span>
           </h2>
           <p className="mt-5 text-slate1 leading-relaxed text-lg max-w-lg">
-            Impressions don't pour concrete. Clicks don't replace a roof. We measure what actually puts trucks on driveways — qualified leads, booked estimates, and the data behind them. We don't guarantee specific results, but we do guarantee a real strategy, real tracking, and straight answers.
+            Impressions don't pour concrete. Clicks don't replace a roof. We measure what actually puts trucks on driveways: qualified leads, booked estimates, and the data behind them. We don't guarantee specific results, but we do guarantee a real strategy, real tracking, and straight answers.
           </p>
           <a href="#audit" className="btn-primary mt-8">
             Get a Free Audit <ArrowRight className="h-4 w-4" />
@@ -969,11 +969,11 @@ function WhyUs() {
    ============================================================ */
 function Process() {
   const steps = [
-    { icon: Eye,           title: 'Audit',   desc: 'We review your website, ads, SEO, competitors, and tracking — no fluff.' },
+    { icon: Eye,           title: 'Audit',   desc: 'We review your website, ads, SEO, competitors, and tracking. No fluff.' },
     { icon: ClipboardList, title: 'Build',   desc: 'We create or rebuild the pages, campaigns, and local SEO foundation.' },
     { icon: Rocket,        title: 'Launch',  desc: 'We launch campaigns and optimize for real quote requests, not vanity clicks.' },
     { icon: Activity,      title: 'Track',   desc: 'We track calls, forms, lead quality, booked estimates, and sold jobs.' },
-    { icon: RefreshCw,     title: 'Improve', desc: 'We keep improving based on actual data — not guesses or gut feel.' }
+    { icon: RefreshCw,     title: 'Improve', desc: 'We keep improving based on actual data, not guesses or gut feel.' }
   ];
 
   return (
@@ -1059,7 +1059,7 @@ function CTA() {
           </h2>
           <p className="mt-6 max-w-2xl mx-auto text-white/75 text-lg">
             Book a free audit and we'll show you what's working, what's wasting money,
-            and what needs to be fixed first — no pressure, no fluff.
+            and what needs to be fixed first. No pressure, no fluff.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <a href="mailto:info@tradeleadsmarketing.ca" className="btn-primary text-base px-7 py-3.5 animate-pulseGlow">
@@ -1117,7 +1117,7 @@ function ContactForm() {
   };
 
   const services = [
-    'Not sure yet — just exploring',
+    'Not sure yet, just exploring',
     'Google Ads management',
     'Website design / rebuild',
     'Local SEO',
@@ -1136,7 +1136,7 @@ function ContactForm() {
             <span className="text-blue">We'll show you what's working.</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-5 text-slate1 leading-relaxed">
-            Send the form and we'll review your website, Google Business Profile, ad presence, and tracking — then walk you through what's helping, what's wasting money, and what to fix first. No obligation.
+            Send the form and we'll review your website, Google Business Profile, ad presence, and tracking. Then we'll walk you through what's helping, what's wasting money, and what to fix first. No obligation.
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-7 space-y-3">
@@ -1162,7 +1162,7 @@ function ContactForm() {
               <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
                 <ShieldCheck className="h-4 w-4 text-blue" />
               </div>
-              <span>Your info stays private — never sold or shared</span>
+              <span>Your info stays private. Never sold or shared.</span>
             </div>
           </motion.div>
         </motion.div>
@@ -1247,7 +1247,7 @@ function ContactForm() {
           {status.state === 'sent' && (
             <div className="mt-5 rounded-lg border border-gGreen/30 bg-gGreen/5 px-4 py-3 text-sm text-gGreen flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
-              <span><strong>Thanks — we got it.</strong> We'll reach out within one business day.</span>
+              <span><strong>Thanks, we got it.</strong> We'll reach out within one business day.</span>
             </div>
           )}
 
@@ -1286,13 +1286,13 @@ function FormField({ label, htmlFor, children }) {
    ============================================================ */
 function FAQ() {
   const faqs = [
-    { q: 'Do you only work with contractors?', a: 'Yes. Contractors and local trade businesses only — landscaping, concrete, roofing, plumbing, electrical, HVAC, paving, builders, and renovation companies. That focus is why our campaigns convert.' },
-    { q: 'How long does it take to see results?', a: 'It depends on your market, budget, and starting point — we don\'t make blanket guarantees. In our experience, Google Ads can start producing qualified leads within the first 1–2 weeks once tracking is set up correctly. SEO and Google Business Profile improvements typically take 60–90+ days to gain traction. We track everything from day one, so even when results take time to compound, you see exactly what is happening week by week.' },
-    { q: 'Do I need a new website?', a: 'Not always. We audit your current site first. If it converts, we leave it. If it leaks leads, we rebuild key pages or the whole site — whatever gets you the highest ROI fastest.' },
-    { q: 'Do you manage Google Ads?', a: 'Yes — and it is a core service. We structure campaigns by service type, exclude wasteful keywords, write contractor-specific ad copy, and tie every click back to booked jobs.' },
+    { q: 'Do you only work with contractors?', a: 'Yes. We work only with contractors and local trade businesses: landscaping, concrete, roofing, plumbing, electrical, HVAC, paving, builders, and renovation companies. That focus is why our campaigns convert.' },
+    { q: 'How long does it take to see results?', a: 'It depends on your market, budget, and starting point. We don\'t make blanket guarantees. In our experience, Google Ads can start producing qualified leads within the first 1-2 weeks once tracking is set up correctly. SEO and Google Business Profile improvements typically take 60-90+ days to gain traction. We track everything from day one, so even when results take time to compound, you see exactly what\'s happening week by week.' },
+    { q: 'Do I need a new website?', a: 'Not always. We audit your current site first. If it converts, we leave it. If it leaks leads, we rebuild key pages or the whole site, whichever gets you the highest ROI fastest.' },
+    { q: 'Do you manage Google Ads?', a: 'Yes, and it\'s a core service. We structure campaigns by service type, exclude wasteful keywords, write contractor-specific ad copy, and tie every click back to booked jobs.' },
     { q: 'Do you help with SEO and Google Business Profile?', a: 'Yes. Local SEO and Google Business Profile optimization are non-negotiable for contractors. We handle citations, reviews strategy, photos, posts, and on-page service content together.' },
     { q: 'Can you track calls and form submissions?', a: 'Always. We install call tracking, form tracking, and conversion tracking before we spend a dollar on ads. You will know exactly which campaign, ad, and keyword booked the job.' },
-    { q: 'What makes you different from other marketing agencies?', a: 'We only work with contractors. We focus on the metrics that map to booked jobs — not just clicks. And we give you straight answers about what is and isn\'t working, without pretty reports that hide bad performance. No 6-month lock-ins, no jargon, no inflated promises.' }
+    { q: 'What makes you different from other marketing agencies?', a: 'We only work with contractors. We focus on the metrics that map to booked jobs, not just clicks. And we give you straight answers about what\'s working and what isn\'t, without pretty reports that hide bad performance. No 6-month lock-ins, no jargon, no inflated promises.' }
   ];
 
   const [open, setOpen] = useState(0);
@@ -1306,7 +1306,7 @@ function FAQ() {
             Straight Answers
           </motion.h2>
           <motion.p variants={fadeUp} className="mt-4 text-slate1 leading-relaxed">
-            Still have questions? Send us a message and we'll get back the same day — no auto-responses.
+            Still have questions? Send us a message and we'll get back the same day. No auto-responses.
           </motion.p>
           <motion.a variants={fadeUp} href="mailto:info@tradeleadsmarketing.ca" className="btn-blue mt-6">
             <Mail className="h-4 w-4" /> Email us
@@ -1364,7 +1364,7 @@ function Footer() {
               </div>
             </div>
             <p className="mt-5 text-white/70 max-w-sm leading-relaxed">
-              Digital marketing for contractors who want more qualified leads — not vanity metrics.
+              Digital marketing for contractors who want more qualified leads, not vanity metrics.
             </p>
             <a href="#audit" className="btn-primary mt-6 text-sm">
               Get a Free Audit <ArrowRight className="h-4 w-4" />

@@ -70,7 +70,7 @@ export default async function handler(req, res) {
     auth: { user, pass }
   });
 
-  const subject = `New lead — ${name}${business ? ` (${business})` : ''}${city ? ` — ${city}` : ''}`;
+  const subject = `New lead from ${name}${business ? ` (${business})` : ''}${city ? `, ${city}` : ''}`;
 
   const html = `
     <div style="font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif; color:#0F172A; max-width:560px;">
@@ -81,11 +81,11 @@ export default async function handler(req, res) {
       <div style="border:1px solid #E2E8F0; border-top:none; padding:24px; border-radius:0 0 12px 12px; background:#fff;">
         <table style="width:100%; border-collapse:collapse; font-size:14px;">
           <tr><td style="padding:6px 0; color:#64748B; width:130px;">Name</td><td style="padding:6px 0; font-weight:600;">${escapeHtml(name)}</td></tr>
-          <tr><td style="padding:6px 0; color:#64748B;">Business</td><td style="padding:6px 0; font-weight:600;">${escapeHtml(business) || '—'}</td></tr>
+          <tr><td style="padding:6px 0; color:#64748B;">Business</td><td style="padding:6px 0; font-weight:600;">${escapeHtml(business) || '<span style="color:#94A3B8;">Not provided</span>'}</td></tr>
           <tr><td style="padding:6px 0; color:#64748B;">Email</td><td style="padding:6px 0;"><a href="mailto:${escapeHtml(email)}" style="color:#1E55C7;">${escapeHtml(email)}</a></td></tr>
-          <tr><td style="padding:6px 0; color:#64748B;">Phone</td><td style="padding:6px 0;"><a href="tel:${escapeHtml(phone)}" style="color:#1E55C7;">${escapeHtml(phone) || '—'}</a></td></tr>
+          <tr><td style="padding:6px 0; color:#64748B;">Phone</td><td style="padding:6px 0;"><a href="tel:${escapeHtml(phone)}" style="color:#1E55C7;">${escapeHtml(phone) || 'Not provided'}</a></td></tr>
           <tr><td style="padding:6px 0; color:#64748B;">City</td><td style="padding:6px 0; font-weight:600;">${escapeHtml(city)}</td></tr>
-          <tr><td style="padding:6px 0; color:#64748B;">Interested in</td><td style="padding:6px 0;">${escapeHtml(service) || '—'}</td></tr>
+          <tr><td style="padding:6px 0; color:#64748B;">Interested in</td><td style="padding:6px 0;">${escapeHtml(service) || 'Not provided'}</td></tr>
         </table>
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid #E2E8F0;">
           <div style="color:#64748B; font-size:12px; text-transform:uppercase; letter-spacing:0.1em; font-weight:600;">Message</div>
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     </div>`;
 
   const text =
-`New audit request — Trade Leads Marketing
+`New audit request from Trade Leads Marketing
 
 Name:        ${name}
 Business:    ${business || '-'}
@@ -113,7 +113,7 @@ ${message || '(no message)'}
 
   try {
     await transporter.sendMail({
-      from: `"Trade Leads Marketing — Form" <${from}>`,
+      from: `"Trade Leads Marketing Form" <${from}>`,
       to,
       replyTo: email,
       subject,
