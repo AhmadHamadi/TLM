@@ -137,10 +137,10 @@ function Navbar() {
   }, []);
 
   const links = [
-    { href: '#services', label: 'Services' },
+    { href: '#packages', label: 'Packages' },
     { href: '#results',  label: 'Results' },
     { href: '#process',  label: 'Process' },
-    { href: '#packages', label: 'Packages' },
+    { href: '#testimonials', label: 'Testimonials' },
     { href: '#faq',      label: 'FAQ' }
   ];
 
@@ -323,8 +323,8 @@ function Hero() {
               <a href="#audit" className="btn-primary animate-pulseGlow">
                 Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#services" className="btn-ghost-light">
-                View Our Services
+              <a href="#packages" className="btn-ghost-light">
+                View Our Packages
               </a>
             </motion.div>
 
@@ -725,6 +725,14 @@ function Testimonials() {
       initials: 'SS',
       bg:    'bg-brand'
     },
+    {
+      quote: 'I was getting reports from my old agency that meant nothing. Trade Leads Marketing showed me the booked jobs and the revenue, not just clicks. The phone is ringing for the right kind of work now.',
+      name:  'Danny',
+      role:  'General Contractor',
+      where: 'Renovations & Custom Builds',
+      initials: 'D',
+      bg:    'bg-gGreen'
+    }
   ];
 
   return (
@@ -739,7 +747,7 @@ function Testimonials() {
         </motion.div>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-3 gap-6">
         {items.map((t, i) => (
           <motion.div
             key={t.name}
@@ -812,64 +820,6 @@ function ProblemSection() {
               </div>
               <h3 className="mt-4 text-lg font-bold text-ink">{p.title}</h3>
               <p className="mt-2 text-slate1 leading-relaxed">{p.desc}</p>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    </Section>
-  );
-}
-
-/* ============================================================
-   9. SERVICES — light card grid
-   ============================================================ */
-function Services() {
-  const services = [
-    { icon: Target,             title: 'Google Ads for Contractors',   benefit: 'Target homeowners actively searching for your service and turn clicks into quote requests.', tone: 'brand' },
-    { icon: Layout,             title: 'Contractor Website Design',     benefit: 'Fast, modern websites built to convert visitors into booked estimates.',                  tone: 'blue'  },
-    { icon: Search,             title: 'Local SEO',                     benefit: 'Rank for high-intent local searches like "concrete contractor near me."',                tone: 'blue'  },
-    { icon: MapPin,             title: 'Google Business Profile',       benefit: 'Dominate the map pack. More reviews, more calls, more direction requests.',             tone: 'brand' },
-    { icon: Sparkles,           title: 'AI Search Optimization',        benefit: 'Show up in ChatGPT, Google AI Overviews, and Perplexity when homeowners ask.',           tone: 'brand' },
-    { icon: Zap,                title: 'Landing Pages',                 benefit: 'Service-specific landing pages built to convert paid traffic into estimates.',          tone: 'blue'  },
-    { icon: Phone,              title: 'Call & Lead Tracking',          benefit: 'See every call, form, and lead source, and know which campaigns book real jobs.',     tone: 'blue'  },
-    { icon: BarChart3,          title: 'Conversion Optimization',       benefit: 'We test offers, headlines, and forms to squeeze more leads from the same traffic.',    tone: 'brand' }
-  ];
-
-  return (
-    <Section id="services" className="bg-soft">
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14 max-w-3xl mx-auto">
-        <motion.span variants={fadeUp} className="eyebrow-light">Services</motion.span>
-        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
-          Services Built to Generate <span className="text-blue">Contractor Leads</span>
-        </motion.h2>
-        <motion.p variants={fadeUp} className="mt-5 text-slate1 text-lg">
-          Every service we offer is wired into one outcome: more booked jobs at a lower cost per lead.
-        </motion.p>
-      </motion.div>
-
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {services.map((s) => {
-          const Icon = s.icon;
-          const tone = s.tone === 'blue';
-          return (
-            <motion.div
-              key={s.title}
-              variants={fadeUp}
-              whileHover={{ y: -6 }}
-              className="group relative bg-white rounded-2xl border border-line p-6 shadow-soft hover:shadow-lifted transition-all duration-300 overflow-hidden"
-            >
-              <div className={`absolute top-0 left-0 right-0 h-0.5 ${tone ? 'bg-blue' : 'bg-brand'} scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500`} />
-              <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${tone ? 'bg-bluesoft text-blue' : 'bg-brand/10 text-brand'}`}>
-                <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-5 text-lg font-bold text-ink">{s.title}</h3>
-              <p className="mt-2 text-sm text-slate1 leading-relaxed">{s.benefit}</p>
-              <a
-                href="#audit"
-                className={`mt-5 inline-flex items-center gap-1 text-sm font-semibold opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity ${tone ? 'text-blue' : 'text-brand'}`}
-              >
-                Learn more <ArrowUpRight className="h-4 w-4" />
-              </a>
             </motion.div>
           );
         })}
@@ -1574,7 +1524,7 @@ function Footer() {
           <div className="md:col-span-2">
             <div className="text-xs uppercase tracking-widest text-white/45 mb-4">Sitemap</div>
             <ul className="space-y-2">
-              {[['Services','#services'], ['Results','#results'], ['Process','#process'], ['FAQ','#faq'], ['Get Audit','#audit']].map(([l, h]) => (
+              {[['Packages','#packages'], ['Results','#results'], ['Process','#process'], ['FAQ','#faq'], ['Get Audit','#audit']].map(([l, h]) => (
                 <li key={l}><a href={h} className="text-white/70 hover:text-brand transition-colors">{l}</a></li>
               ))}
             </ul>
@@ -1629,12 +1579,11 @@ export default function App() {
         <Results />
         <Testimonials />
         <ProblemSection />
-        <Services />
+        <Packages />
         <WhyUs />
         <Process />
         <CTA />
         <FAQ />
-        <Packages />
         <ContactForm />
       </main>
       <Footer />
