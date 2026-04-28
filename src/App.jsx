@@ -237,6 +237,9 @@ function HeroSearchMockup() {
           src="/heroimage.png"
           alt="Google search showing Seven Stones Landscape ranked #1 for landscaping contractor near me"
           className="block w-full h-auto"
+          fetchpriority="high"
+          loading="eager"
+          decoding="async"
         />
 
         {/* Top badge */}
@@ -423,6 +426,7 @@ function WebsiteBeforeAfter() {
 
       <div
         className="relative aspect-[16/10] cursor-ew-resize select-none bg-white"
+        style={{ touchAction: 'pan-y' }}
         onMouseMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           setPos(((e.clientX - rect.left) / rect.width) * 100);

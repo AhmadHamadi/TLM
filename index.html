@@ -2,54 +2,139 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/tlmlogo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- Primary SEO -->
-    <title>Trade Leads Marketing — Digital Marketing for Contractors That Actually Books Jobs</title>
-    <meta name="description" content="Trade Leads Marketing helps contractors in Canada and the US get more qualified leads through Google Ads, contractor websites, local SEO, and Google Business Profile optimization. Book a free marketing audit today." />
-    <meta name="keywords" content="contractor marketing, contractor lead generation, Google Ads for contractors, contractor SEO, Google Business Profile, contractor website design, roofer marketing, landscaper marketing, plumber marketing, HVAC marketing" />
+    <!-- =====================================================
+         FAVICONS & APP ICONS
+         ===================================================== -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="/tlmlogo.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="application-name" content="Trade Leads Marketing" />
+    <meta name="apple-mobile-web-app-title" content="Trade Leads" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="msapplication-TileColor" content="#0A1B3D" />
+    <meta name="msapplication-TileImage" content="/tlmlogo.png" />
+    <meta name="theme-color" content="#0A1B3D" />
+
+    <!-- =====================================================
+         PRIMARY SEO
+         ===================================================== -->
+    <title>Trade Leads Marketing — Digital Marketing for Contractors That Books Real Jobs</title>
+    <meta name="description" content="Trade Leads Marketing helps contractors get more qualified leads through Google Ads, contractor websites, local SEO, and Google Business Profile optimization. Book a free marketing audit today." />
+    <meta name="keywords" content="contractor marketing, contractor lead generation, Google Ads for contractors, contractor SEO, Google Business Profile optimization, contractor website design, roofer marketing, landscaper marketing, plumber marketing, HVAC marketing, concrete contractor marketing, lead tracking for contractors" />
     <meta name="author" content="Trade Leads Marketing" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="publisher" content="Trade Leads Marketing" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="bingbot" content="index, follow" />
+    <meta name="rating" content="general" />
+    <meta name="distribution" content="global" />
+    <meta name="revisit-after" content="7 days" />
     <link rel="canonical" href="https://tradeleadsmarketing.ca/" />
 
-    <!-- Open Graph -->
+    <!-- =====================================================
+         OPEN GRAPH (Facebook, LinkedIn, iMessage, etc.)
+         ===================================================== -->
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_CA" />
     <meta property="og:url" content="https://tradeleadsmarketing.ca/" />
+    <meta property="og:site_name" content="Trade Leads Marketing" />
     <meta property="og:title" content="Trade Leads Marketing — Digital Marketing for Contractors" />
     <meta property="og:description" content="More qualified leads for contractors. We build websites, run Google Ads, and dominate local SEO that books real jobs." />
     <meta property="og:image" content="https://tradeleadsmarketing.ca/og.png" />
-    <meta property="og:site_name" content="Trade Leads Marketing" />
+    <meta property="og:image:secure_url" content="https://tradeleadsmarketing.ca/og.png" />
+    <meta property="og:image:alt" content="Trade Leads Marketing — digital marketing for contractors" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-    <!-- Twitter -->
+    <!-- =====================================================
+         TWITTER / X
+         ===================================================== -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Trade Leads Marketing — Digital Marketing for Contractors" />
     <meta name="twitter:description" content="More qualified leads for contractors. We build websites, run Google Ads, and dominate local SEO that books real jobs." />
     <meta name="twitter:image" content="https://tradeleadsmarketing.ca/og.png" />
+    <meta name="twitter:image:alt" content="Trade Leads Marketing — digital marketing for contractors" />
 
-    <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#0A1B3D" />
-
-    <!-- Performance -->
+    <!-- =====================================================
+         PERFORMANCE — preconnect & prefetch
+         ===================================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="preload" as="image" href="/heroimage.png" />
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- Schema: LocalBusiness / MarketingAgency -->
+    <!-- =====================================================
+         STRUCTURED DATA (Schema.org JSON-LD)
+         ===================================================== -->
+
+    <!-- Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": "https://tradeleadsmarketing.ca/#organization",
+      "name": "Trade Leads Marketing",
+      "alternateName": "TLM",
+      "url": "https://tradeleadsmarketing.ca/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tradeleadsmarketing.ca/tlmlogo.png",
+        "width": 512,
+        "height": 512
+      },
+      "description": "Digital marketing agency built specifically for contractors and trade businesses.",
+      "email": "info@tradeleadsmarketing.ca",
+      "telephone": "+1-289-489-1167",
+      "areaServed": ["CA", "US"],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+1-289-489-1167",
+        "contactType": "customer service",
+        "email": "info@tradeleadsmarketing.ca",
+        "availableLanguage": ["English"]
+      }
+    }
+    </script>
+
+    <!-- Website (enables sitelinks search) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://tradeleadsmarketing.ca/#website",
+      "url": "https://tradeleadsmarketing.ca/",
+      "name": "Trade Leads Marketing",
+      "description": "Digital marketing for contractors who want more qualified leads.",
+      "publisher": { "@id": "https://tradeleadsmarketing.ca/#organization" },
+      "inLanguage": "en-CA"
+    }
+    </script>
+
+    <!-- ProfessionalService with services + aggregate rating -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
+      "@id": "https://tradeleadsmarketing.ca/#service",
       "name": "Trade Leads Marketing",
-      "url": "https://tradeleadsmarketing.ca/",
-      "logo": "https://tradeleadsmarketing.ca/tlmlogo.png",
       "image": "https://tradeleadsmarketing.ca/tlmlogo.png",
-      "description": "Digital marketing agency built specifically for contractors. We provide Google Ads management, contractor website design, local SEO, Google Business Profile optimization, and lead tracking.",
+      "url": "https://tradeleadsmarketing.ca/",
+      "telephone": "+1-289-489-1167",
+      "email": "info@tradeleadsmarketing.ca",
       "priceRange": "$$",
-      "areaServed": ["Canada", "United States"],
+      "description": "Digital marketing agency specializing in lead generation for contractors — Google Ads, contractor websites, local SEO, Google Business Profile optimization, and lead tracking.",
+      "areaServed": [
+        { "@type": "Country", "name": "Canada" },
+        { "@type": "Country", "name": "United States" }
+      ],
       "serviceType": [
         "Google Ads Management",
         "Contractor Website Design",
@@ -57,18 +142,113 @@
         "Google Business Profile Optimization",
         "AI Search Optimization",
         "Conversion Rate Optimization",
-        "Call Tracking"
+        "Call & Form Tracking"
       ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Contractor Marketing Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Ads for Contractors", "description": "Target homeowners actively searching for your service and turn clicks into quote requests." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contractor Website Design", "description": "Fast, modern websites built to convert visitors into booked estimates." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Local SEO", "description": "Rank for high-intent local searches like 'concrete contractor near me'." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Business Profile Optimization", "description": "Dominate the local map pack with photos, reviews, and category targeting." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Search Optimization", "description": "Show up inside ChatGPT, Google AI Overviews, and Perplexity." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Lead & Call Tracking", "description": "See every call, form, and lead source — and know which campaigns book real jobs." } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Conversion Rate Optimization", "description": "Test offers, headlines, and forms to squeeze more leads from the same traffic." } }
+        ]
+      },
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "5.0",
-        "reviewCount": "27"
+        "reviewCount": "27",
+        "bestRating": "5",
+        "worstRating": "1"
       }
+    }
+    </script>
+
+    <!-- FAQPage (rich-snippet eligible on Google) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do you only work with contractors?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Contractors and local trade businesses only — landscaping, concrete, roofing, plumbing, electrical, HVAC, paving, builders, and renovation companies. That focus is why our campaigns convert."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take to see results?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on your market, budget, and starting point — we don't make blanket guarantees. Google Ads can start producing qualified leads within the first 1–2 weeks once tracking is set up correctly. SEO and Google Business Profile improvements typically take 60–90+ days to gain traction. We track everything from day one, so even when results take time to compound, you see exactly what is happening week by week."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a new website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not always. We audit your current site first. If it converts, we leave it. If it leaks leads, we rebuild key pages or the whole site — whatever gets you the highest ROI fastest."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you manage Google Ads?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — and it is a core service. We structure campaigns by service type, exclude wasteful keywords, write contractor-specific ad copy, and tie every click back to booked jobs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you help with SEO and Google Business Profile?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Local SEO and Google Business Profile optimization are non-negotiable for contractors. We handle citations, reviews strategy, photos, posts, and on-page service content together."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you track calls and form submissions?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Always. We install call tracking, form tracking, and conversion tracking before we spend a dollar on ads. You will know exactly which campaign, ad, and keyword booked the job."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes you different from other marketing agencies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We only work with contractors. We focus on the metrics that map to booked jobs — not just clicks. And we give you straight answers about what is and isn't working, without pretty reports that hide bad performance. No 6-month lock-ins, no jargon, no inflated promises."
+          }
+        }
+      ]
     }
     </script>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Fallback for users with JavaScript disabled -->
+    <noscript>
+      <div style="font-family: -apple-system, sans-serif; max-width: 640px; margin: 60px auto; padding: 24px; text-align: center;">
+        <h1>Trade Leads Marketing</h1>
+        <p>Digital marketing for contractors who want more qualified leads.</p>
+        <p>Please enable JavaScript to view this site, or contact us directly:</p>
+        <p>
+          <a href="tel:+12894891167">(289) 489-1167</a> ·
+          <a href="mailto:info@tradeleadsmarketing.ca">info@tradeleadsmarketing.ca</a>
+        </p>
+      </div>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
