@@ -1079,6 +1079,7 @@ function Packages() {
         '1 conversion-focused landing page',
         'Google Ads campaign setup',
         'Monthly Google Ads management',
+        'Ongoing campaign optimization based on lead and conversion data',
         'Keyword research',
         'Negative keyword optimization',
         'Ad copywriting',
@@ -1102,6 +1103,7 @@ function Packages() {
       features: [
         'Full contractor website build',
         'Google Ads setup and management',
+        'Ongoing Google Ads optimization based on lead and conversion data',
         'SEO setup and monthly SEO management',
         'Google Business Profile setup and optimization',
         'Monthly GBP updates',
