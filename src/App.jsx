@@ -1,0 +1,1441 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView, animate, useMotionValue, useTransform } from 'framer-motion';
+import {
+  Menu, X, ArrowRight, ArrowUpRight, Phone, Mail, MapPin, Star, ChevronDown,
+  CheckCircle2, XCircle, Search, Globe, Zap, Target, BarChart3, Layout,
+  Sparkles, TrendingUp, Eye, ClipboardList, Rocket, Activity, RefreshCw,
+  ShieldCheck, Award, Users, MousePointerClick, FileText, DollarSign,
+  Clock, ThumbsUp, MessageSquare, Calendar
+} from 'lucide-react';
+
+/* ============================================================
+   TRADE LEADS MARKETING — REDESIGN
+   Trust-first · White + Navy · Authentic Google-styled mockups
+   ============================================================ */
+
+/* ---------- Animation primitives ---------- */
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }
+};
+const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } } };
+
+/* ---------- Animated counter ---------- */
+function Counter({ from = 0, to = 100, suffix = '', prefix = '', duration = 1.6, decimals = 0 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-50px' });
+  const mv = useMotionValue(from);
+  const rounded = useTransform(mv, (v) => `${prefix}${v.toFixed(decimals).toLocaleString ? Number(v.toFixed(decimals)).toLocaleString() : v.toFixed(decimals)}${suffix}`);
+  useEffect(() => { if (inView) animate(mv, to, { duration, ease: 'easeOut' }); }, [inView, mv, to, duration]);
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+}
+
+/* ---------- Inline SVGs: brand glyphs ---------- */
+const GoogleG = ({ className = 'h-5 w-5' }) => (
+  <svg className={className} viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/>
+    <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/>
+    <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/>
+    <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/>
+  </svg>
+);
+
+const GoogleAdsBadge = ({ className = 'h-6 w-6' }) => (
+  <svg className={className} viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#FBBC04" d="M62 24l60 104-30 52L32 76z"/>
+    <path fill="#4285F4" d="M122 24l60 104-30 52L92 76z"/>
+    <circle cx="46" cy="151" r="29" fill="#34A853"/>
+  </svg>
+);
+
+const GoogleMyBusiness = ({ className = 'h-6 w-6' }) => (
+  <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#4285F4" d="M12 2C7.58 2 4 5.58 4 10c0 5.25 7 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z"/>
+    <circle cx="12" cy="10" r="3" fill="#fff"/>
+  </svg>
+);
+
+/* ---------- Realistic Google Maps-styled SVG (Austin, TX vibe) ---------- */
+const StreetMap = ({ className = '' }) => (
+  <svg className={className} viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    {/* Land base */}
+    <rect width="600" height="240" fill="#E9EEF3" />
+    {/* Parks (green) */}
+    <path d="M 0 30 Q 60 20 110 50 L 130 90 Q 90 110 30 100 Z" fill="#C5E1B5" />
+    <path d="M 420 0 Q 480 15 540 0 L 540 70 Q 470 80 420 60 Z" fill="#C5E1B5" />
+    <circle cx="350" cy="180" r="32" fill="#C5E1B5" />
+    {/* Water (lake / river — Lady Bird Lake style) */}
+    <path d="M 0 145 C 80 130, 160 165, 250 150 C 340 135, 420 175, 540 155 L 600 165 L 600 200 C 480 215, 360 195, 250 205 C 140 215, 60 195, 0 200 Z" fill="#A9C9E8" />
+    {/* Major roads (yellow highways) */}
+    <path d="M -10 60 L 620 90" stroke="#FBC85F" strokeWidth="6" />
+    <path d="M -10 60 L 620 90" stroke="#FFFFFF" strokeWidth="1" strokeDasharray="6 6" />
+    <path d="M 200 -10 L 240 250" stroke="#FBC85F" strokeWidth="5" />
+    <path d="M 200 -10 L 240 250" stroke="#FFFFFF" strokeWidth="1" strokeDasharray="6 6" />
+    {/* Secondary streets (white) */}
+    <g stroke="#FFFFFF" strokeWidth="3">
+      <path d="M 0 35 L 600 25" />
+      <path d="M 0 110 L 600 120" />
+      <path d="M 0 200 L 600 220" />
+      <path d="M 80 0 L 90 240" />
+      <path d="M 320 0 L 340 240" />
+      <path d="M 450 0 L 470 240" />
+      <path d="M 530 0 L 540 240" />
+    </g>
+    {/* Tertiary streets (light) */}
+    <g stroke="#F4F4F4" strokeWidth="1.4">
+      <path d="M 0 75 L 600 65" />
+      <path d="M 0 130 L 600 138" />
+      <path d="M 0 175 L 600 180" />
+      <path d="M 0 215 L 600 230" />
+      <path d="M 40 0 L 48 240" />
+      <path d="M 140 0 L 150 240" />
+      <path d="M 270 0 L 282 240" />
+      <path d="M 380 0 L 392 240" />
+      <path d="M 500 0 L 510 240" />
+    </g>
+    {/* Building blocks */}
+    <g fill="#DCE3EA">
+      <rect x="100" y="40" width="20" height="14" rx="1" />
+      <rect x="160" y="35" width="22" height="18" rx="1" />
+      <rect x="250" y="42" width="14" height="14" rx="1" />
+      <rect x="290" y="45" width="20" height="12" rx="1" />
+      <rect x="380" y="38" width="22" height="16" rx="1" />
+      <rect x="100" y="80" width="18" height="22" rx="1" />
+      <rect x="160" y="78" width="22" height="24" rx="1" />
+      <rect x="280" y="75" width="20" height="22" rx="1" />
+      <rect x="380" y="80" width="20" height="20" rx="1" />
+      <rect x="500" y="80" width="18" height="20" rx="1" />
+      <rect x="50" y="118" width="24" height="14" rx="1" />
+      <rect x="100" y="115" width="22" height="18" rx="1" />
+      <rect x="280" y="120" width="20" height="14" rx="1" />
+      <rect x="380" y="120" width="24" height="14" rx="1" />
+      <rect x="500" y="118" width="20" height="14" rx="1" />
+    </g>
+  </svg>
+);
+
+/* ---------- Section wrappers ---------- */
+function Section({ id, children, className = '', dark = false }) {
+  return (
+    <section id={id} className={`relative py-20 md:py-28 px-6 md:px-10 ${className}`}>
+      <div className="mx-auto max-w-7xl">{children}</div>
+    </section>
+  );
+}
+
+/* ============================================================
+   1. NAVBAR — clean light nav with subtle backdrop
+   ============================================================ */
+function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const links = [
+    { href: '#services', label: 'Services' },
+    { href: '#results',  label: 'Results' },
+    { href: '#process',  label: 'Process' },
+    { href: '#testimonials', label: 'Testimonials' },
+    { href: '#faq',      label: 'FAQ' }
+  ];
+
+  return (
+    <motion.header
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white/85 backdrop-blur-lg border-b border-line shadow-soft'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="mx-auto max-w-7xl px-6 md:px-10 flex items-center justify-between py-3.5">
+        <a href="#top" className="flex items-center gap-3">
+          <div className="h-11 w-11 rounded-xl bg-white border border-line flex items-center justify-center shadow-soft p-1">
+            <img src="/tlmlogo.png" alt="Trade Leads Marketing" className="h-full w-full object-contain" />
+          </div>
+          <div className="leading-tight">
+            <div className={`font-extrabold tracking-tight ${scrolled ? 'text-ink' : 'text-ink'}`}>Trade Leads</div>
+            <div className="text-[10px] uppercase tracking-[0.25em] text-brand font-bold -mt-0.5">Marketing</div>
+          </div>
+        </a>
+
+        <nav className="hidden lg:flex items-center gap-8">
+          {links.map((l) => (
+            <a key={l.href} href={l.href} className="text-sm font-medium text-slate1 hover:text-ink transition-colors">
+              {l.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="hidden lg:flex items-center gap-3">
+          <a href="tel:+12894891167" className="text-sm font-semibold text-ink hover:text-blue inline-flex items-center gap-1.5">
+            <Phone className="h-4 w-4" /> (289) 489-1167
+          </a>
+          <a href="#audit" className="btn-primary text-sm py-2.5">
+            Get More Leads <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+
+        <button
+          aria-label="Toggle menu"
+          onClick={() => setOpen((o) => !o)}
+          className="lg:hidden p-2 rounded-lg border border-line text-ink bg-white"
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="lg:hidden overflow-hidden bg-white border-t border-line"
+          >
+            <div className="px-6 py-4 flex flex-col gap-3">
+              {links.map((l) => (
+                <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="text-ink py-2 border-b border-line">
+                  {l.label}
+                </a>
+              ))}
+              <a href="#audit" onClick={() => setOpen(false)} className="btn-primary mt-2 w-full">
+                Get More Leads <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.header>
+  );
+}
+
+/* ============================================================
+   2. HERO — split layout with realistic Google search mockup
+   ============================================================ */
+function HeroSearchMockup() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1, delay: 0.3 }}
+      className="relative"
+    >
+      {/* Soft glow */}
+      <div className="absolute -inset-4 bg-gradient-to-br from-blue/15 via-brand/10 to-transparent blur-3xl rounded-[2rem]" />
+
+      {/* Hero image (real Google search screenshot) */}
+      <div className="relative rounded-2xl overflow-hidden border border-line shadow-lifted bg-white">
+        <img
+          src="/heroimage.png"
+          alt="Google search showing Seven Stones Landscape ranked #1 for landscaping contractor near me"
+          className="block w-full h-auto"
+        />
+
+        {/* Top badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="absolute top-4 right-4 flex items-center gap-2 bg-white/95 backdrop-blur rounded-full pl-2 pr-3 py-1.5 shadow-soft border border-line"
+        >
+          <span className="h-2 w-2 rounded-full bg-gGreen animate-pulse" />
+          <span className="text-[11px] font-bold text-ink uppercase tracking-wider">Live · 32 leads this week</span>
+        </motion.div>
+      </div>
+
+      {/* Floating callout: phone call notification */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.3 }}
+        className="hidden md:flex absolute -left-6 top-32 bg-white rounded-xl border border-line shadow-lifted px-4 py-3 items-center gap-3 animate-floaty z-10"
+      >
+        <div className="h-10 w-10 rounded-full bg-gGreen/10 flex items-center justify-center">
+          <Phone className="h-5 w-5 text-gGreen" />
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">Incoming call</div>
+          <div className="text-sm font-semibold text-ink">Concrete driveway · Austin, TX</div>
+        </div>
+      </motion.div>
+
+      {/* Floating: lead form */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.5 }}
+        style={{ animationDelay: '1s' }}
+        className="hidden md:flex absolute -right-4 -bottom-6 bg-white rounded-xl border border-line shadow-lifted px-4 py-3 items-center gap-3 animate-floaty z-10"
+      >
+        <div className="h-10 w-10 rounded-full bg-brand/10 flex items-center justify-center">
+          <FileText className="h-5 w-5 text-brand" />
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">Quote request</div>
+          <div className="text-sm font-semibold text-ink">Roof replacement · $14,200</div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function Hero() {
+  return (
+    <section id="top" className="relative pt-32 md:pt-40 pb-20 px-6 md:px-10 overflow-hidden bg-white">
+      <div className="absolute inset-0 grid-bg opacity-50" />
+      <div className="absolute -top-40 left-1/3 h-[500px] w-[700px] rounded-full bg-blue/10 blur-[120px]" />
+      <div className="absolute top-20 right-0 h-[400px] w-[400px] rounded-full bg-brand/10 blur-[120px]" />
+
+      <div className="mx-auto max-w-7xl relative">
+        <div className="grid lg:grid-cols-12 gap-12 items-center">
+          <motion.div initial="hidden" animate="show" variants={stagger} className="lg:col-span-6">
+            <motion.div variants={fadeUp} className="eyebrow-light">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue" />
+              Built specifically for contractors
+            </motion.div>
+
+            <motion.h1 variants={fadeUp} className="h-display text-5xl md:text-7xl text-ink mt-5">
+              More Contractor Leads.<br />
+              <span className="text-blue">Better Jobs.</span><br />
+              Less Wasted Ad Spend.
+            </motion.h1>
+
+            <motion.p variants={fadeUp} className="mt-6 text-lg text-slate1 max-w-xl leading-relaxed">
+              We build high-converting websites, run Google Ads campaigns, and dominate local SEO so
+              contractors book more profitable jobs — not just rack up clicks.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+              <a href="#audit" className="btn-primary animate-pulseGlow">
+                Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
+              </a>
+              <a href="#services" className="btn-ghost-light">
+                View Our Services
+              </a>
+            </motion.div>
+
+            {/* Trust strip */}
+            <motion.div variants={fadeUp} className="mt-10 pt-8 border-t border-line">
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-gReview text-gReview" />)}
+                  </div>
+                  <span className="text-sm font-semibold text-ink">5.0</span>
+                  <span className="text-sm text-slate2">on Google</span>
+                </div>
+                <div className="h-4 w-px bg-line" />
+                <div className="flex items-center gap-2 text-sm text-slate1">
+                  <ShieldCheck className="h-4 w-4 text-gGreen" />
+                  <span className="font-medium">Tracking included</span>
+                </div>
+                <div className="h-4 w-px bg-line" />
+                <div className="flex items-center gap-2 text-sm text-slate1">
+                  <CheckCircle2 className="h-4 w-4 text-gGreen" />
+                  <span className="font-medium">No long contracts</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <div className="lg:col-span-6">
+            <HeroSearchMockup />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   3. TRUST STRIP — industries served
+   ============================================================ */
+function TrustStrip() {
+  const industries = ['Concrete', 'Roofing', 'Landscaping', 'Plumbing', 'HVAC', 'Electrical', 'Renovation', 'Paving', 'Builders', 'Excavation', 'Painting', 'Decking'];
+  return (
+    <section className="bg-soft border-y border-line py-10">
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="text-xs uppercase tracking-[0.3em] text-slate2 text-center font-bold mb-6">
+          Trusted by contractors across North America
+        </div>
+        <div className="overflow-hidden relative">
+          <div className="flex gap-12 animate-marquee whitespace-nowrap">
+            {[...industries, ...industries].map((t, i) => (
+              <div key={i} className="flex items-center gap-2 text-slate1 font-bold text-lg">
+                <div className="h-2 w-2 rounded-full bg-brand" />
+                {t}
+              </div>
+            ))}
+          </div>
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-soft to-transparent pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-soft to-transparent pointer-events-none" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   4. BEFORE / AFTER — WEBSITE (interactive slider)
+   ============================================================ */
+function WebsiteBeforeAfter() {
+  const [pos, setPos] = useState(50);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    if (!inView) return;
+    let frame;
+    const start = performance.now();
+    const tick = (t) => {
+      const elapsed = (t - start) / 1000;
+      // Auto-sweep once: 50 → 15 → 85 → 50
+      const wave = Math.sin(elapsed * 0.9) * 35 + 50;
+      setPos(wave);
+      if (elapsed < 5) frame = requestAnimationFrame(tick);
+      else setPos(50);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [inView]);
+
+  return (
+    <div ref={ref} className="relative rounded-2xl overflow-hidden border border-line shadow-lifted bg-white">
+      {/* Browser chrome */}
+      <div className="flex items-center gap-2 px-4 py-3 bg-soft border-b border-line">
+        <div className="flex gap-1.5">
+          <div className="h-3 w-3 rounded-full bg-[#FF5F57]" />
+          <div className="h-3 w-3 rounded-full bg-[#FEBC2E]" />
+          <div className="h-3 w-3 rounded-full bg-[#28C840]" />
+        </div>
+        <div className="flex-1 mx-3 px-3 py-1 bg-white rounded-md border border-line text-[11px] text-slate2 font-mono">
+          sevenstoneslandscape.ca
+        </div>
+      </div>
+
+      <div
+        className="relative aspect-[16/10] cursor-ew-resize select-none bg-white"
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          setPos(((e.clientX - rect.left) / rect.width) * 100);
+        }}
+        onTouchMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const t = e.touches[0];
+          setPos(Math.max(0, Math.min(100, ((t.clientX - rect.left) / rect.width) * 100)));
+        }}
+      >
+        {/* AFTER (full layer underneath) */}
+        <img
+          src="/slider2.png"
+          alt="Modern, high-converting contractor website (after)"
+          className="absolute inset-0 w-full h-full object-cover object-top"
+          loading="lazy"
+        />
+
+        {/* BEFORE (clipped overlay) */}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
+        >
+          <img
+            src="/slider1.png"
+            alt="Outdated contractor website (before)"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            loading="lazy"
+          />
+        </div>
+
+        {/* Slider handle */}
+        <div className="absolute top-0 bottom-0 w-1 bg-brand pointer-events-none" style={{ left: `${pos}%` }}>
+          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-12 w-12 rounded-full bg-brand shadow-glow flex items-center justify-center text-white">
+            <ArrowRight className="h-4 w-4 -ml-2" />
+            <ArrowRight className="h-4 w-4 -mr-2 rotate-180" />
+          </div>
+        </div>
+
+        {/* Labels */}
+        <div className="absolute top-3 left-3 text-[10px] font-extrabold tracking-widest text-white bg-gRed/90 px-2 py-1 rounded shadow-soft">BEFORE</div>
+        <div className="absolute top-3 right-3 text-[10px] font-extrabold tracking-widest text-white bg-blue px-2 py-1 rounded shadow-soft">AFTER</div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   5. BEFORE / AFTER — GOOGLE BUSINESS PROFILE
+   ============================================================ */
+function GBPBeforeAfter() {
+  return (
+    <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+      {/* BEFORE */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="bg-white rounded-2xl border border-line shadow-soft overflow-hidden"
+      >
+        <div className="px-5 py-3 border-b border-line flex items-center justify-between bg-soft">
+          <div className="flex items-center gap-2">
+            <GoogleMyBusiness className="h-4 w-4" />
+            <span className="text-xs font-bold text-slate1 uppercase tracking-widest">Before</span>
+          </div>
+          <span className="text-[10px] font-bold uppercase text-gRed bg-gRed/10 px-2 py-0.5 rounded">Page 2 · Low Visibility</span>
+        </div>
+        <div className="relative bg-soft">
+          <img
+            src="/gbpbefore.png"
+            alt="Google search before — Seven Stones Landscape with low visibility, no photos, only 9 reviews"
+            className="block w-full h-auto"
+            loading="lazy"
+          />
+        </div>
+        <div className="p-5">
+          <ul className="space-y-2 text-sm text-slate1">
+            <li className="flex items-center gap-2"><XCircle className="h-4 w-4 text-gRed shrink-0" /> No photos uploaded</li>
+            <li className="flex items-center gap-2"><XCircle className="h-4 w-4 text-gRed shrink-0" /> Hours &amp; service area missing</li>
+            <li className="flex items-center gap-2"><XCircle className="h-4 w-4 text-gRed shrink-0" /> 9 reviews · 3.4 rating</li>
+            <li className="flex items-center gap-2"><XCircle className="h-4 w-4 text-gRed shrink-0" /> Buried below the local map pack</li>
+          </ul>
+        </div>
+      </motion.div>
+
+      {/* AFTER */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+        className="bg-white rounded-2xl border-2 border-blue/30 shadow-lifted overflow-hidden relative"
+      >
+        <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-blue via-brand to-blue z-10" />
+        <div className="px-5 py-3 border-b border-line flex items-center justify-between bg-bluesoft">
+          <div className="flex items-center gap-2">
+            <GoogleMyBusiness className="h-4 w-4" />
+            <span className="text-xs font-bold text-blue uppercase tracking-widest">After</span>
+          </div>
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="text-[10px] font-bold uppercase text-gGreen bg-gGreen/10 px-2 py-0.5 rounded"
+          >
+            Map Pack · #1
+          </motion.span>
+        </div>
+        <div className="relative bg-soft">
+          <img
+            src="/gbpafter.png"
+            alt="Google search after — Seven Stones Landscape ranked Map Pack #1 with 247 reviews and 80+ photos"
+            className="block w-full h-auto"
+            loading="lazy"
+          />
+        </div>
+        <div className="p-5">
+          <ul className="space-y-2 text-sm text-slate1">
+            <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-gGreen shrink-0" /> 80+ professional photos uploaded</li>
+            <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-gGreen shrink-0" /> Live hours, services &amp; offers</li>
+            <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-gGreen shrink-0" /> 247 reviews · 5.0 rating</li>
+            <li className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-gGreen shrink-0" /> Ranks #1 in the local map pack</li>
+          </ul>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================
+   6. BEFORE / AFTER — GOOGLE ADS
+   ============================================================ */
+function AdsBeforeAfter() {
+  return (
+    <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="bg-white rounded-2xl border border-line shadow-soft overflow-hidden"
+      >
+        <img
+          src="/googlebefore.png"
+          alt="Google Ads before — stuck at position 4, $92 per lead, 1.1% click-through rate"
+          className="block w-full h-auto"
+          loading="lazy"
+        />
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+        className="bg-white rounded-2xl border-2 border-brand/30 shadow-lifted overflow-hidden relative"
+      >
+        <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-brand via-blue to-brand z-10" />
+        <img
+          src="/googleafter.png"
+          alt="Google Ads after — top of page at position 1, $26 per lead, 7.8% click-through rate"
+          className="block w-full h-auto"
+          loading="lazy"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================
+   RESULTS WRAPPER — three before/after sections
+   ============================================================ */
+function Results() {
+  return (
+    <Section id="results" className="bg-navy text-white">
+      <div className="absolute inset-0 grid-bg-dark opacity-40" />
+      <div className="relative">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-16 max-w-3xl mx-auto">
+          <motion.span variants={fadeUp} className="eyebrow-dark">Real Transformations</motion.span>
+          <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-6xl mt-4">
+            Before &amp; After:<br />
+            <span className="text-brand">What Better Marketing Should Look Like</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-white/70 text-lg">
+            Three things every contractor needs working together — your website, your Google Business Profile, and your Google Ads.
+          </motion.p>
+        </motion.div>
+
+        {/* 1. Website */}
+        <div className="mb-20">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="mb-8 max-w-2xl">
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-3">
+              <div className="h-9 w-9 rounded-lg bg-blue/20 border border-blue/30 flex items-center justify-center">
+                <Globe className="h-4 w-4 text-blue" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-widest text-blue">01 · Website</span>
+            </motion.div>
+            <motion.h3 variants={fadeUp} className="h-display text-2xl md:text-3xl">
+              From a 2008-era site no one trusts → a high-converting contractor landing page
+            </motion.h3>
+            <motion.p variants={fadeUp} className="mt-2 text-white/65">Drag the slider to compare. Auto-plays on first view.</motion.p>
+          </motion.div>
+          <WebsiteBeforeAfter />
+        </div>
+
+        {/* 2. GBP */}
+        <div className="mb-20">
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="mb-8 max-w-2xl">
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-3">
+              <div className="h-9 w-9 rounded-lg bg-gGreen/20 border border-gGreen/30 flex items-center justify-center">
+                <MapPin className="h-4 w-4 text-gGreen" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-widest text-gGreen">02 · Google Business Profile</span>
+            </motion.div>
+            <motion.h3 variants={fadeUp} className="h-display text-2xl md:text-3xl">
+              From buried on page 2 → owning the local map pack
+            </motion.h3>
+            <motion.p variants={fadeUp} className="mt-2 text-white/65">More photos, more reviews, optimized categories — all the things competitors ignore.</motion.p>
+          </motion.div>
+          <GBPBeforeAfter />
+        </div>
+
+        {/* 3. Google Ads */}
+        <div>
+          <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="mb-8 max-w-2xl">
+            <motion.div variants={fadeUp} className="flex items-center gap-2 mb-3">
+              <div className="h-9 w-9 rounded-lg bg-brand/20 border border-brand/30 flex items-center justify-center">
+                <Target className="h-4 w-4 text-brand" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-widest text-brand">03 · Google Ads</span>
+            </motion.div>
+            <motion.h3 variants={fadeUp} className="h-display text-2xl md:text-3xl">
+              From wasted spend at position 4 → top-of-page with a fraction of the cost
+            </motion.h3>
+            <motion.p variants={fadeUp} className="mt-2 text-white/65">Better quality score, better ad copy, better targeting — built around homeowners who buy.</motion.p>
+          </motion.div>
+          <AdsBeforeAfter />
+        </div>
+
+        {/* Stats strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-16"
+        >
+          <div className="text-center text-[10px] uppercase tracking-[0.3em] text-white/45 font-bold mb-4">
+            Examples from past contractor campaigns
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { v: 312, s: '%',     l: 'Lead growth (case study)',  c: 'text-brand' },
+              { v: 47,  s: '%',     l: 'Cost-per-lead reduction',   c: 'text-blue'  },
+              { v: 4.8, s: 'x',     l: 'Site conversion improvement', c: 'text-brand', d: 1 },
+              { v: 90,  s: ' days', l: 'Typical timeline to traction', c: 'text-blue' }
+            ].map((stat) => (
+              <div key={stat.l} className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center backdrop-blur">
+                <div className={`text-3xl md:text-4xl font-black ${stat.c}`}>
+                  <Counter to={stat.v} suffix={stat.s} decimals={stat.d || 0} />
+                </div>
+                <div className="text-xs uppercase tracking-wider text-white/55 mt-1">{stat.l}</div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center text-[11px] text-white/45 mt-4 max-w-2xl mx-auto">
+            Results vary by market, budget, and competition. Numbers shown reflect outcomes from specific past contractor campaigns and should not be interpreted as a guarantee of future results.
+          </div>
+        </motion.div>
+      </div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   7. TESTIMONIALS — Google review-styled
+   ============================================================ */
+function Testimonials() {
+  const items = [
+    {
+      quote: 'Trade Leads Marketing rebuilt our landing page, cleaned up our Google Business Profile, and our quote requests jumped within weeks. We can finally see exactly which jobs came from which campaign.',
+      name:  'John Scime',
+      role:  'Owner, Seven Stones Landscape',
+      where: 'sevenstoneslandscape.ca',
+      site:  'https://sevenstoneslandscape.ca',
+      initials: 'JS',
+      bg:    'bg-blue'
+    },
+    {
+      quote: 'These guys actually understand contractors. Our Google Ads were bleeding money before — now we are booking high-ticket HVAC jobs at a fraction of the cost per lead. Straight shooters.',
+      name:  'Saif Sabeeh',
+      role:  'Owner, Ikad Mechanical HVAC',
+      where: 'HVAC · Heating & Cooling',
+      initials: 'SS',
+      bg:    'bg-brand'
+    },
+    {
+      quote: 'I was getting reports from my old agency that meant nothing. Trade Leads Marketing showed me booked jobs and revenue. The phone is ringing for the right kind of work now.',
+      name:  'Danny',
+      role:  'Owner, General Contractor',
+      where: 'Renovation & Builds',
+      initials: 'D',
+      bg:    'bg-gGreen'
+    }
+  ];
+
+  return (
+    <Section id="testimonials" className="bg-soft">
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14">
+        <motion.span variants={fadeUp} className="eyebrow-light">Contractor-Approved</motion.span>
+        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
+          What Contractors Say
+        </motion.h2>
+        <motion.div variants={fadeUp} className="flex items-center justify-center gap-2 mt-4">
+          <div className="flex">
+            {[1,2,3,4,5].map(i => <Star key={i} className="h-5 w-5 fill-gReview text-gReview" />)}
+          </div>
+          <span className="text-ink font-semibold">5.0</span>
+          <span className="text-slate2">— from 27+ verified Google reviews</span>
+        </motion.div>
+      </motion.div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {items.map((t, i) => (
+          <motion.div
+            key={t.name}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: i * 0.12 }}
+            className="bg-white rounded-2xl border border-line shadow-soft hover:shadow-lifted hover:-translate-y-1 transition-all duration-300 p-7 relative"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex">
+                {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-gReview text-gReview" />)}
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase text-slate2">
+                <GoogleG className="h-3 w-3" /> Verified
+              </div>
+            </div>
+            <p className="text-ink leading-relaxed">"{t.quote}"</p>
+            <div className="mt-6 pt-6 border-t border-line flex items-center gap-3">
+              <div className={`h-12 w-12 rounded-full ${t.bg} flex items-center justify-center text-white font-extrabold shadow-soft`}>
+                {t.initials}
+              </div>
+              <div>
+                <div className="font-bold text-ink">{t.name}</div>
+                <div className="text-xs text-slate2">{t.role}</div>
+                {t.site ? (
+                  <a href={t.site} target="_blank" rel="noreferrer" className="text-xs text-blue hover:underline flex items-center gap-1 mt-0.5 font-medium">
+                    <Globe className="h-3 w-3" /> {t.where}
+                  </a>
+                ) : (
+                  <div className="text-xs text-slate3 flex items-center gap-1 mt-0.5"><MapPin className="h-3 w-3" /> {t.where}</div>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   8. PROBLEM SECTION
+   ============================================================ */
+function ProblemSection() {
+  const pains = [
+    { icon: DollarSign, title: 'Wasted ad spend', desc: 'You spend money on ads but never know which keywords actually book jobs.' },
+    { icon: Globe,      title: "Site that doesn't convert", desc: 'Visitors land, scroll, and leave. No quote request, no call.' },
+    { icon: MapPin,     title: 'Weak Google Business Profile', desc: 'You\'re invisible in the map pack while competitors stack reviews.' },
+    { icon: Search,     title: 'SEO ignored',     desc: 'No structure, no content, no rankings for "near me" service searches.' },
+    { icon: Phone,      title: 'Leads not tracked', desc: 'Calls and forms are vanishing into a black box. No source. No data.' },
+    { icon: BarChart3,  title: 'Reports, not jobs', desc: 'Agencies send pretty PDFs. None of it ties back to booked work.' }
+  ];
+
+  return (
+    <Section id="problem" className="bg-white">
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14 max-w-3xl mx-auto">
+        <motion.span variants={fadeUp} className="eyebrow-light">The Real Problem</motion.span>
+        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
+          Most Contractors Don't Have a Marketing Problem.<br />
+          <span className="text-blue">They Have a Tracking Problem.</span>
+        </motion.h2>
+        <motion.p variants={fadeUp} className="mt-5 text-slate1 text-lg">
+          You can't fix what you can't see. Here's what's quietly killing your ROI right now.
+        </motion.p>
+      </motion.div>
+
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {pains.map((p) => {
+          const Icon = p.icon;
+          return (
+            <motion.div key={p.title} variants={fadeUp} className="bg-white rounded-2xl border border-line p-6 hover:border-brand/40 hover:shadow-soft transition-all duration-300 group">
+              <div className="h-11 w-11 rounded-xl bg-gRed/10 border border-gRed/20 flex items-center justify-center group-hover:bg-brand/10 group-hover:border-brand/30 transition-colors">
+                <Icon className="h-5 w-5 text-gRed group-hover:text-brand transition-colors" />
+              </div>
+              <h3 className="mt-4 text-lg font-bold text-ink">{p.title}</h3>
+              <p className="mt-2 text-slate1 leading-relaxed">{p.desc}</p>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   9. SERVICES — light card grid
+   ============================================================ */
+function Services() {
+  const services = [
+    { icon: Target,             title: 'Google Ads for Contractors',   benefit: 'Target homeowners actively searching for your service and turn clicks into quote requests.', tone: 'brand' },
+    { icon: Layout,             title: 'Contractor Website Design',     benefit: 'Fast, modern websites built to convert visitors into booked estimates.',                  tone: 'blue'  },
+    { icon: Search,             title: 'Local SEO',                     benefit: 'Rank for high-intent local searches like "concrete contractor near me."',                tone: 'blue'  },
+    { icon: MapPin,             title: 'Google Business Profile',       benefit: 'Dominate the map pack — more reviews, more calls, more direction requests.',             tone: 'brand' },
+    { icon: Sparkles,           title: 'AI Search Optimization',        benefit: 'Show up in ChatGPT, Google AI Overviews, and Perplexity when homeowners ask.',           tone: 'brand' },
+    { icon: Zap,                title: 'Landing Pages',                 benefit: 'Service-specific landing pages built to convert paid traffic into estimates.',          tone: 'blue'  },
+    { icon: Phone,              title: 'Call & Lead Tracking',          benefit: 'See every call, form, and lead source — and know which campaigns book real jobs.',     tone: 'blue'  },
+    { icon: BarChart3,          title: 'Conversion Optimization',       benefit: 'We test offers, headlines, and forms to squeeze more leads from the same traffic.',    tone: 'brand' }
+  ];
+
+  return (
+    <Section id="services" className="bg-soft">
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14 max-w-3xl mx-auto">
+        <motion.span variants={fadeUp} className="eyebrow-light">Services</motion.span>
+        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
+          Services Built to Generate <span className="text-blue">Contractor Leads</span>
+        </motion.h2>
+        <motion.p variants={fadeUp} className="mt-5 text-slate1 text-lg">
+          Every service we offer is wired into one outcome: more booked jobs at a lower cost per lead.
+        </motion.p>
+      </motion.div>
+
+      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {services.map((s) => {
+          const Icon = s.icon;
+          const tone = s.tone === 'blue';
+          return (
+            <motion.div
+              key={s.title}
+              variants={fadeUp}
+              whileHover={{ y: -6 }}
+              className="group relative bg-white rounded-2xl border border-line p-6 shadow-soft hover:shadow-lifted transition-all duration-300 overflow-hidden"
+            >
+              <div className={`absolute top-0 left-0 right-0 h-0.5 ${tone ? 'bg-blue' : 'bg-brand'} scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500`} />
+              <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${tone ? 'bg-bluesoft text-blue' : 'bg-brand/10 text-brand'}`}>
+                <Icon className="h-5 w-5" />
+              </div>
+              <h3 className="mt-5 text-lg font-bold text-ink">{s.title}</h3>
+              <p className="mt-2 text-sm text-slate1 leading-relaxed">{s.benefit}</p>
+              <a
+                href="#audit"
+                className={`mt-5 inline-flex items-center gap-1 text-sm font-semibold opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity ${tone ? 'text-blue' : 'text-brand'}`}
+              >
+                Learn more <ArrowUpRight className="h-4 w-4" />
+              </a>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   10. WHY US — split, white background
+   ============================================================ */
+function WhyUs() {
+  const points = [
+    { icon: Users,         t: 'Built specifically for contractors',     d: 'Not law firms, not e-commerce. Just trades.' },
+    { icon: Target,        t: 'We chase booked jobs',                   d: 'Calls, forms, estimates, and revenue — that\'s the scorecard.' },
+    { icon: Layout,        t: 'Buyer-intent landing pages',             d: 'Pages designed for homeowners who are ready to spend.' },
+    { icon: BarChart3,     t: 'Reduced ad waste',                       d: 'Negative keywords, geo-targeting, and quality-score tuning.' },
+    { icon: MapPin,        t: 'Local SEO that ranks',                   d: 'Service area pages, citations, and review velocity.' },
+    { icon: ShieldCheck,   t: 'Tracking installed before launch',       d: 'Calls, forms, conversions — everything attributed.' },
+    { icon: ClipboardList, t: 'Reporting tied to revenue',              d: 'No vanity metrics. Just the numbers that pay for trucks.' }
+  ];
+
+  return (
+    <Section id="why" className="bg-white">
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="lg:sticky lg:top-32">
+          <span className="eyebrow-light">Why Trade Leads Marketing</span>
+          <h2 className="h-display text-4xl md:text-5xl mt-4 text-ink">
+            We Don't Chase <span className="line-through text-slate3">Vanity Metrics.</span><br />
+            <span className="text-blue">We Chase Jobs.</span>
+          </h2>
+          <p className="mt-5 text-slate1 leading-relaxed text-lg max-w-lg">
+            Impressions don't pour concrete. Clicks don't replace a roof. We measure what actually puts trucks on driveways — qualified leads, booked estimates, and the data behind them. We don't guarantee specific results, but we do guarantee a real strategy, real tracking, and straight answers.
+          </p>
+          <a href="#audit" className="btn-primary mt-8">
+            Get a Free Audit <ArrowRight className="h-4 w-4" />
+          </a>
+
+          {/* Trust cards */}
+          <div className="grid grid-cols-3 gap-3 mt-10">
+            {[
+              { icon: Award,        l: '5.0 Stars',     s: 'Google Reviews' },
+              { icon: ShieldCheck,  l: 'Contractor-Only', s: 'Specialty Focus' },
+              { icon: ThumbsUp,     l: 'Month-to-Month', s: 'No long contracts' }
+            ].map((b) => {
+              const Icon = b.icon;
+              return (
+                <div key={b.l} className="text-center p-4 rounded-xl border border-line">
+                  <Icon className="h-5 w-5 text-blue mx-auto" />
+                  <div className="font-bold text-ink mt-2 text-sm">{b.l}</div>
+                  <div className="text-[10px] text-slate2 uppercase tracking-wider mt-0.5">{b.s}</div>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        <motion.ul initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="space-y-3">
+          {points.map((p) => {
+            const Icon = p.icon;
+            return (
+              <motion.li key={p.t} variants={fadeUp} className="flex items-start gap-4 bg-white border border-line rounded-xl p-5 hover:border-blue/40 hover:shadow-soft transition-all duration-300">
+                <div className="h-10 w-10 shrink-0 rounded-lg bg-bluesoft flex items-center justify-center">
+                  <Icon className="h-5 w-5 text-blue" />
+                </div>
+                <div>
+                  <div className="font-bold text-ink">{p.t}</div>
+                  <div className="text-slate1 text-sm mt-0.5">{p.d}</div>
+                </div>
+              </motion.li>
+            );
+          })}
+        </motion.ul>
+      </div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   11. PROCESS — animated timeline (dark)
+   ============================================================ */
+function Process() {
+  const steps = [
+    { icon: Eye,           title: 'Audit',   desc: 'We review your website, ads, SEO, competitors, and tracking — no fluff.' },
+    { icon: ClipboardList, title: 'Build',   desc: 'We create or rebuild the pages, campaigns, and local SEO foundation.' },
+    { icon: Rocket,        title: 'Launch',  desc: 'We launch campaigns and optimize for real quote requests, not vanity clicks.' },
+    { icon: Activity,      title: 'Track',   desc: 'We track calls, forms, lead quality, booked estimates, and sold jobs.' },
+    { icon: RefreshCw,     title: 'Improve', desc: 'We keep improving based on actual data — not guesses or gut feel.' }
+  ];
+
+  return (
+    <Section id="process" className="bg-navy text-white">
+      <div className="absolute inset-0 grid-bg-dark opacity-40" />
+      <div className="relative">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-16 max-w-3xl mx-auto">
+          <motion.span variants={fadeUp} className="eyebrow-dark">Our Process</motion.span>
+          <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl mt-4">
+            A Simple System for <span className="text-brand">More Qualified Leads</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-white/70 text-lg">
+            Five steps. Every contractor we work with goes through them. Every step ties to job revenue.
+          </motion.p>
+        </motion.div>
+
+        <div className="relative">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.4, ease: 'easeOut' }}
+            style={{ transformOrigin: 'left' }}
+            className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-blue/0 via-blue to-brand"
+          />
+
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-4">
+            {steps.map((s, i) => {
+              const Icon = s.icon;
+              const isBlue = i % 2 === 0;
+              return (
+                <motion.div
+                  key={s.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, delay: i * 0.15 }}
+                  className="relative text-center"
+                >
+                  <div className="relative mx-auto h-24 w-24 mb-5">
+                    <div className={`absolute inset-0 rounded-full ${isBlue ? 'bg-blue/20' : 'bg-brand/20'} blur-xl`} />
+                    <div className={`relative h-24 w-24 rounded-full bg-charcoal border-2 ${isBlue ? 'border-blue/50 shadow-glowBlue' : 'border-brand/50 shadow-glow'} flex items-center justify-center`}>
+                      <Icon className={`h-8 w-8 ${isBlue ? 'text-blue' : 'text-brand'}`} />
+                      <div className={`absolute -top-2 -right-2 h-8 w-8 rounded-full ${isBlue ? 'bg-blue' : 'bg-brand'} text-white font-extrabold flex items-center justify-center text-sm shadow-lg`}>
+                        {i + 1}
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold">{s.title}</h3>
+                  <p className="mt-2 text-sm text-white/65 leading-relaxed px-2">{s.desc}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   12. CTA
+   ============================================================ */
+function CTA() {
+  return (
+    <Section id="contact" className="bg-white">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-charcoal to-navydeep p-10 md:p-16 text-center"
+      >
+        <div className="absolute -top-32 -left-32 h-72 w-72 rounded-full bg-blue/30 blur-3xl" />
+        <div className="absolute -bottom-32 -right-32 h-72 w-72 rounded-full bg-brand/30 blur-3xl" />
+        <div className="absolute inset-0 grid-bg-dark opacity-30" />
+
+        <div className="relative">
+          <span className="eyebrow-dark">Ready When You Are</span>
+          <h2 className="h-display text-4xl md:text-6xl text-white mt-4 max-w-3xl mx-auto">
+            Ready to Stop Guessing and<br className="hidden md:block" />
+            <span className="text-brand">Start Getting Better Leads?</span>
+          </h2>
+          <p className="mt-6 max-w-2xl mx-auto text-white/75 text-lg">
+            Book a free audit and we'll show you what's working, what's wasting money,
+            and what needs to be fixed first — no pressure, no fluff.
+          </p>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+            <a href="mailto:info@tradeleadsmarketing.ca" className="btn-primary text-base px-7 py-3.5 animate-pulseGlow">
+              Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="tel:+12894891167" className="btn-ghost-dark">
+              <Phone className="h-4 w-4" /> (289) 489-1167
+            </a>
+          </div>
+          <div className="mt-6 flex items-center justify-center gap-6 flex-wrap text-xs text-white/60">
+            <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> 30-min call</div>
+            <div className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-gGreen" /> No obligation</div>
+            <div className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-gGreen" /> Contractor-focused</div>
+          </div>
+        </div>
+      </motion.div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   CONTACT FORM — sends via /api/lead → SMTP → info@tradeleadsmarketing.ca
+   ============================================================ */
+function ContactForm() {
+  const [data, setData] = useState({
+    name: '', business: '', email: '', phone: '', city: '', service: '', message: '', website: ''
+  });
+  const [status, setStatus] = useState({ state: 'idle', error: null });
+
+  const update = (k) => (e) => setData({ ...data, [k]: e.target.value });
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (data.website) return; // honeypot
+    if (!data.name.trim() || !data.email.trim() || !data.city.trim()) {
+      setStatus({ state: 'error', error: 'Please add your name, email, and city.' });
+      return;
+    }
+    setStatus({ state: 'sending', error: null });
+    try {
+      const res = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error || 'Submission failed. Please email info@tradeleadsmarketing.ca directly.');
+      }
+      setStatus({ state: 'sent', error: null });
+      setData({ name: '', business: '', email: '', phone: '', city: '', service: '', message: '', website: '' });
+    } catch (err) {
+      setStatus({ state: 'error', error: err.message });
+    }
+  };
+
+  const services = [
+    'Not sure yet — just exploring',
+    'Google Ads management',
+    'Website design / rebuild',
+    'Local SEO',
+    'Google Business Profile',
+    'Lead tracking setup',
+    'Full audit & strategy'
+  ];
+
+  return (
+    <Section id="audit" className="bg-white">
+      <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="lg:col-span-5">
+          <motion.span variants={fadeUp} className="eyebrow-light">Get Your Free Audit</motion.span>
+          <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
+            Tell us about your business.<br />
+            <span className="text-blue">We'll show you what's working.</span>
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-5 text-slate1 leading-relaxed">
+            Send the form and we'll review your website, Google Business Profile, ad presence, and tracking — then walk you through what's helping, what's wasting money, and what to fix first. No obligation.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="mt-7 space-y-3">
+            <a href="tel:+12894891167" className="flex items-center gap-3 text-ink font-semibold hover:text-blue">
+              <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
+                <Phone className="h-4 w-4 text-blue" />
+              </div>
+              (289) 489-1167
+            </a>
+            <a href="mailto:info@tradeleadsmarketing.ca" className="flex items-center gap-3 text-ink font-semibold hover:text-blue">
+              <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
+                <Mail className="h-4 w-4 text-blue" />
+              </div>
+              info@tradeleadsmarketing.ca
+            </a>
+            <div className="flex items-center gap-3 text-slate1">
+              <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
+                <Clock className="h-4 w-4 text-blue" />
+              </div>
+              <span>Same-day reply during business hours</span>
+            </div>
+            <div className="flex items-center gap-3 text-slate1">
+              <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
+                <ShieldCheck className="h-4 w-4 text-blue" />
+              </div>
+              <span>Your info stays private — never sold or shared</span>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          onSubmit={submit}
+          className="lg:col-span-7 bg-white rounded-2xl border border-line shadow-lifted p-7 md:p-9"
+        >
+          {/* Honeypot */}
+          <input
+            type="text"
+            name="website"
+            value={data.website}
+            onChange={update('website')}
+            tabIndex="-1"
+            autoComplete="off"
+            className="hidden"
+            aria-hidden="true"
+          />
+
+          <div className="grid md:grid-cols-2 gap-5">
+            <FormField label="Your name *" htmlFor="name">
+              <input id="name" type="text" required value={data.name} onChange={update('name')} placeholder="John Smith" className="form-input" />
+            </FormField>
+            <FormField label="Business name" htmlFor="business">
+              <input id="business" type="text" value={data.business} onChange={update('business')} placeholder="Smith Concrete Co." className="form-input" />
+            </FormField>
+            <FormField label="Email *" htmlFor="email">
+              <input id="email" type="email" required value={data.email} onChange={update('email')} placeholder="you@yourcompany.com" className="form-input" />
+            </FormField>
+            <FormField label="Phone" htmlFor="phone">
+              <input id="phone" type="tel" value={data.phone} onChange={update('phone')} placeholder="(555) 123-4567" className="form-input" />
+            </FormField>
+          </div>
+
+          <div className="mt-5">
+            <FormField label="City / location *" htmlFor="city">
+              <input
+                id="city"
+                type="text"
+                required
+                value={data.city}
+                onChange={update('city')}
+                placeholder="e.g. Austin, TX or Hamilton, ON"
+                className="form-input"
+              />
+            </FormField>
+          </div>
+
+          <div className="mt-5">
+            <FormField label="What are you most interested in?" htmlFor="service">
+              <select id="service" value={data.service} onChange={update('service')} className="form-input">
+                <option value="">Select an option…</option>
+                {services.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </FormField>
+          </div>
+
+          <div className="mt-5">
+            <FormField label="Tell us a bit about your business" htmlFor="message">
+              <textarea
+                id="message"
+                rows="4"
+                value={data.message}
+                onChange={update('message')}
+                placeholder="Trade, location, current marketing spend, biggest pain point…"
+                className="form-input resize-none"
+              />
+            </FormField>
+          </div>
+
+          {status.state === 'error' && (
+            <div className="mt-5 rounded-lg border border-gRed/30 bg-gRed/5 px-4 py-3 text-sm text-gRed flex items-start gap-2">
+              <XCircle className="h-4 w-4 shrink-0 mt-0.5" />
+              <span>{status.error}</span>
+            </div>
+          )}
+          {status.state === 'sent' && (
+            <div className="mt-5 rounded-lg border border-gGreen/30 bg-gGreen/5 px-4 py-3 text-sm text-gGreen flex items-start gap-2">
+              <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" />
+              <span><strong>Thanks — we got it.</strong> We'll reach out within one business day.</span>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={status.state === 'sending'}
+            className="btn-primary w-full md:w-auto mt-6 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {status.state === 'sending' ? (
+              <>Sending…</>
+            ) : (
+              <>Get My Free Audit <ArrowRight className="h-4 w-4" /></>
+            )}
+          </button>
+
+          <div className="mt-4 text-xs text-slate2">
+            By submitting, you agree we may contact you about your audit. We will never sell or share your information.
+          </div>
+        </motion.form>
+      </div>
+    </Section>
+  );
+}
+
+function FormField({ label, htmlFor, children }) {
+  return (
+    <label htmlFor={htmlFor} className="block">
+      <span className="text-xs font-semibold text-ink uppercase tracking-wider">{label}</span>
+      <div className="mt-1.5">{children}</div>
+    </label>
+  );
+}
+
+/* ============================================================
+   13. FAQ — light, accordion
+   ============================================================ */
+function FAQ() {
+  const faqs = [
+    { q: 'Do you only work with contractors?', a: 'Yes. Contractors and local trade businesses only — landscaping, concrete, roofing, plumbing, electrical, HVAC, paving, builders, and renovation companies. That focus is why our campaigns convert.' },
+    { q: 'How long does it take to see results?', a: 'It depends on your market, budget, and starting point — we don\'t make blanket guarantees. In our experience, Google Ads can start producing qualified leads within the first 1–2 weeks once tracking is set up correctly. SEO and Google Business Profile improvements typically take 60–90+ days to gain traction. We track everything from day one, so even when results take time to compound, you see exactly what is happening week by week.' },
+    { q: 'Do I need a new website?', a: 'Not always. We audit your current site first. If it converts, we leave it. If it leaks leads, we rebuild key pages or the whole site — whatever gets you the highest ROI fastest.' },
+    { q: 'Do you manage Google Ads?', a: 'Yes — and it is a core service. We structure campaigns by service type, exclude wasteful keywords, write contractor-specific ad copy, and tie every click back to booked jobs.' },
+    { q: 'Do you help with SEO and Google Business Profile?', a: 'Yes. Local SEO and Google Business Profile optimization are non-negotiable for contractors. We handle citations, reviews strategy, photos, posts, and on-page service content together.' },
+    { q: 'Can you track calls and form submissions?', a: 'Always. We install call tracking, form tracking, and conversion tracking before we spend a dollar on ads. You will know exactly which campaign, ad, and keyword booked the job.' },
+    { q: 'What makes you different from other marketing agencies?', a: 'We only work with contractors. We focus on the metrics that map to booked jobs — not just clicks. And we give you straight answers about what is and isn\'t working, without pretty reports that hide bad performance. No 6-month lock-ins, no jargon, no inflated promises.' }
+  ];
+
+  const [open, setOpen] = useState(0);
+
+  return (
+    <Section id="faq" className="bg-white">
+      <div className="grid lg:grid-cols-12 gap-12">
+        <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="lg:col-span-4">
+          <motion.span variants={fadeUp} className="eyebrow-light">FAQ</motion.span>
+          <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
+            Straight Answers
+          </motion.h2>
+          <motion.p variants={fadeUp} className="mt-4 text-slate1 leading-relaxed">
+            Still have questions? Send us a message and we'll get back the same day — no auto-responses.
+          </motion.p>
+          <motion.a variants={fadeUp} href="mailto:info@tradeleadsmarketing.ca" className="btn-blue mt-6">
+            <Mail className="h-4 w-4" /> Email us
+          </motion.a>
+        </motion.div>
+
+        <div className="lg:col-span-8 space-y-3">
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <motion.div
+                key={f.q}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                className={`bg-white rounded-xl border transition-all overflow-hidden ${isOpen ? 'border-blue/40 shadow-soft' : 'border-line'}`}
+              >
+                <button onClick={() => setOpen(isOpen ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+                  <span className="font-semibold text-ink">{f.q}</span>
+                  <ChevronDown className={`h-5 w-5 text-blue transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
+                      <div className="px-6 pb-5 text-slate1 leading-relaxed border-t border-line pt-4">{f.a}</div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </Section>
+  );
+}
+
+/* ============================================================
+   14. FOOTER
+   ============================================================ */
+function Footer() {
+  return (
+    <footer className="relative bg-navy text-white border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-6 md:px-10 py-14">
+        <div className="grid md:grid-cols-12 gap-10">
+          <div className="md:col-span-5">
+            <div className="flex items-center gap-3">
+              <div className="h-12 w-12 rounded-xl bg-white p-1.5 flex items-center justify-center">
+                <img src="/tlmlogo.png" alt="Trade Leads Marketing" className="h-full w-full object-contain" />
+              </div>
+              <div>
+                <div className="font-extrabold tracking-tight">Trade Leads Marketing</div>
+                <div className="text-[10px] uppercase tracking-[0.25em] text-brand font-bold -mt-0.5">tradeleadsmarketing.ca</div>
+              </div>
+            </div>
+            <p className="mt-5 text-white/70 max-w-sm leading-relaxed">
+              Digital marketing for contractors who want more qualified leads — not vanity metrics.
+            </p>
+            <a href="#audit" className="btn-primary mt-6 text-sm">
+              Get a Free Audit <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+
+          <div className="md:col-span-2">
+            <div className="text-xs uppercase tracking-widest text-white/45 mb-4">Sitemap</div>
+            <ul className="space-y-2">
+              {[['Services','#services'], ['Results','#results'], ['Process','#process'], ['FAQ','#faq'], ['Get Audit','#audit']].map(([l, h]) => (
+                <li key={l}><a href={h} className="text-white/70 hover:text-brand transition-colors">{l}</a></li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="md:col-span-2">
+            <div className="text-xs uppercase tracking-widest text-white/45 mb-4">Industries</div>
+            <ul className="space-y-2 text-white/70">
+              <li>Concrete</li><li>Roofing</li><li>Landscaping</li><li>HVAC</li><li>Plumbing</li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-3">
+            <div className="text-xs uppercase tracking-widest text-white/45 mb-4">Contact</div>
+            <a href="tel:+12894891167" className="text-white/85 hover:text-brand transition-colors flex items-center gap-2">
+              <Phone className="h-4 w-4" /> (289) 489-1167
+            </a>
+            <a href="mailto:info@tradeleadsmarketing.ca" className="mt-2 text-white/85 hover:text-brand transition-colors flex items-center gap-2">
+              <Mail className="h-4 w-4" /> info@tradeleadsmarketing.ca
+            </a>
+            <div className="mt-3 text-white/55 text-sm">Serving contractors across North America.</div>
+            <div className="mt-4 flex items-center gap-2">
+              <div className="flex">
+                {[1,2,3,4,5].map(i => <Star key={i} className="h-3.5 w-3.5 fill-gReview text-gReview" />)}
+              </div>
+              <span className="text-xs text-white/70">5.0 on Google</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 pt-6 border-t border-white/10 space-y-3 text-xs text-white/50">
+          <p className="leading-relaxed max-w-4xl">
+            <span className="font-bold text-white/70">Disclaimer:</span> Trade Leads Marketing does not guarantee specific lead volume, ranking position, or revenue outcomes. Results depend on factors including market competition, budget, service area, seasonality, and the contractor's own sales process. Examples and case studies on this site reflect outcomes from specific past campaigns and are not predictive of future performance. Google&trade;, Google Ads&trade;, and Google Business Profile&trade; are trademarks of Google LLC, used here for descriptive purposes; Trade Leads Marketing is not affiliated with or endorsed by Google.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/10">
+            <div>© {new Date().getFullYear()} Trade Leads Marketing. All rights reserved.</div>
+            <div>Built for contractors. Built to convert.</div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ============================================================
+   APP — section order
+   ============================================================ */
+export default function App() {
+  return (
+    <div className="min-h-screen bg-white text-ink antialiased overflow-x-hidden">
+      <Navbar />
+      <main>
+        <Hero />
+        <TrustStrip />
+        <Results />
+        <Testimonials />
+        <ProblemSection />
+        <Services />
+        <WhyUs />
+        <Process />
+        <CTA />
+        <FAQ />
+        <ContactForm />
+      </main>
+      <Footer />
+    </div>
+  );
+}
