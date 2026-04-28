@@ -242,19 +242,22 @@ function HeroSearchMockup() {
           decoding="async"
         />
 
-        {/* Top badge */}
-        <motion.div
+        {/* Client attribution badge */}
+        <motion.a
+          href="https://sevenstoneslandscape.ca"
+          target="_blank"
+          rel="noreferrer"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="absolute top-4 right-4 flex items-center gap-2 bg-white/95 backdrop-blur rounded-full pl-2 pr-3 py-1.5 shadow-soft border border-line"
+          className="absolute top-4 right-4 flex items-center gap-2 bg-white/95 backdrop-blur rounded-full pl-2 pr-3 py-1.5 shadow-soft border border-line hover:border-blue/40 transition-colors"
         >
-          <span className="h-2 w-2 rounded-full bg-gGreen animate-pulse" />
-          <span className="text-[11px] font-bold text-ink uppercase tracking-wider">Live · 32 leads this week</span>
-        </motion.div>
+          <span className="text-[10px] font-bold text-blue uppercase tracking-wider bg-bluesoft px-1.5 py-0.5 rounded">Client</span>
+          <span className="text-[11px] font-semibold text-ink">Seven Stones Landscape</span>
+        </motion.a>
       </div>
 
-      {/* Floating callout: phone call notification */}
+      {/* Floating callout: what we track */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -265,12 +268,12 @@ function HeroSearchMockup() {
           <Phone className="h-5 w-5 text-gGreen" />
         </div>
         <div>
-          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">Incoming call</div>
-          <div className="text-sm font-semibold text-ink">Concrete driveway · Austin, TX</div>
+          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">We track</div>
+          <div className="text-sm font-semibold text-ink">Phone calls from ads</div>
         </div>
       </motion.div>
 
-      {/* Floating: lead form */}
+      {/* Floating: lead form tracking */}
       <motion.div
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -282,8 +285,8 @@ function HeroSearchMockup() {
           <FileText className="h-5 w-5 text-brand" />
         </div>
         <div>
-          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">Quote request</div>
-          <div className="text-sm font-semibold text-ink">Roof replacement · $14,200</div>
+          <div className="text-[10px] uppercase tracking-wider text-slate2 font-bold">We track</div>
+          <div className="text-sm font-semibold text-ink">Quote &amp; estimate requests</div>
         </div>
       </motion.div>
     </motion.div>
@@ -327,23 +330,20 @@ function Hero() {
 
             {/* Trust strip */}
             <motion.div variants={fadeUp} className="mt-10 pt-8 border-t border-line">
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-gReview text-gReview" />)}
-                  </div>
-                  <span className="text-sm font-semibold text-ink">5.0</span>
-                  <span className="text-sm text-slate2">on Google</span>
-                </div>
-                <div className="h-4 w-px bg-line" />
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                 <div className="flex items-center gap-2 text-sm text-slate1">
                   <ShieldCheck className="h-4 w-4 text-gGreen" />
-                  <span className="font-medium">Tracking included</span>
+                  <span className="font-medium">Tracking included from day one</span>
                 </div>
                 <div className="h-4 w-px bg-line" />
                 <div className="flex items-center gap-2 text-sm text-slate1">
                   <CheckCircle2 className="h-4 w-4 text-gGreen" />
-                  <span className="font-medium">No long contracts</span>
+                  <span className="font-medium">Month-to-month, no long contracts</span>
+                </div>
+                <div className="h-4 w-px bg-line" />
+                <div className="flex items-center gap-2 text-sm text-slate1">
+                  <Users className="h-4 w-4 text-blue" />
+                  <span className="font-medium">Contractors only</span>
                 </div>
               </div>
             </motion.div>
@@ -676,7 +676,7 @@ function Results() {
           className="mt-16"
         >
           <div className="text-center text-[10px] uppercase tracking-[0.3em] text-white/45 font-bold mb-4">
-            Examples from past contractor campaigns
+            Sample improvements from a real contractor campaign
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -694,7 +694,7 @@ function Results() {
             ))}
           </div>
           <div className="text-center text-[11px] text-white/45 mt-4 max-w-2xl mx-auto">
-            Results vary by market, budget, and competition. Numbers shown reflect outcomes from specific past contractor campaigns and should not be interpreted as a guarantee of future results.
+            Results vary by market, budget, seasonality, and competition. Numbers shown reflect specific past contractor campaigns and should not be interpreted as a guarantee of future results. Speak with us directly to discuss what is realistic for your business.
           </div>
         </motion.div>
       </div>
@@ -724,14 +724,6 @@ function Testimonials() {
       initials: 'SS',
       bg:    'bg-brand'
     },
-    {
-      quote: 'I was getting reports from my old agency that meant nothing. Trade Leads Marketing showed me booked jobs and revenue. The phone is ringing for the right kind of work now.',
-      name:  'Danny',
-      role:  'Owner, General Contractor',
-      where: 'Renovation & Builds',
-      initials: 'D',
-      bg:    'bg-gGreen'
-    }
   ];
 
   return (
@@ -741,16 +733,12 @@ function Testimonials() {
         <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
           What Contractors Say
         </motion.h2>
-        <motion.div variants={fadeUp} className="flex items-center justify-center gap-2 mt-4">
-          <div className="flex">
-            {[1,2,3,4,5].map(i => <Star key={i} className="h-5 w-5 fill-gReview text-gReview" />)}
-          </div>
-          <span className="text-ink font-semibold">5.0</span>
-          <span className="text-slate2">from 27+ verified Google reviews</span>
+        <motion.div variants={fadeUp} className="text-slate1 mt-3 max-w-2xl mx-auto">
+          Real contractors. Real campaigns. Reach out to any of them directly if you want to verify.
         </motion.div>
       </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
         {items.map((t, i) => (
           <motion.div
             key={t.name}
@@ -760,13 +748,8 @@ function Testimonials() {
             transition={{ duration: 0.6, delay: i * 0.12 }}
             className="bg-white rounded-2xl border border-line shadow-soft hover:shadow-lifted hover:-translate-y-1 transition-all duration-300 p-7 relative"
           >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex">
-                {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-gReview text-gReview" />)}
-              </div>
-              <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase text-slate2">
-                <GoogleG className="h-3 w-3" /> Verified
-              </div>
+            <div className="flex">
+              {[1,2,3,4,5].map(i => <Star key={i} className="h-4 w-4 fill-gReview text-gReview" />)}
             </div>
             <p className="text-ink leading-relaxed">"{t.quote}"</p>
             <div className="mt-6 pt-6 border-t border-line flex items-center gap-3">
@@ -927,9 +910,9 @@ function WhyUs() {
           {/* Trust cards */}
           <div className="grid grid-cols-3 gap-3 mt-10">
             {[
-              { icon: Award,        l: '5.0 Stars',     s: 'Google Reviews' },
               { icon: ShieldCheck,  l: 'Contractor-Only', s: 'Specialty Focus' },
-              { icon: ThumbsUp,     l: 'Month-to-Month', s: 'No long contracts' }
+              { icon: ThumbsUp,     l: 'Month-to-Month', s: 'No long contracts' },
+              { icon: Activity,     l: 'Tracked',         s: 'From Day One' }
             ].map((b) => {
               const Icon = b.icon;
               return (
@@ -1396,11 +1379,8 @@ function Footer() {
               <Mail className="h-4 w-4" /> info@tradeleadsmarketing.ca
             </a>
             <div className="mt-3 text-white/55 text-sm">Serving contractors across North America.</div>
-            <div className="mt-4 flex items-center gap-2">
-              <div className="flex">
-                {[1,2,3,4,5].map(i => <Star key={i} className="h-3.5 w-3.5 fill-gReview text-gReview" />)}
-              </div>
-              <span className="text-xs text-white/70">5.0 on Google</span>
+            <div className="mt-4 text-xs text-white/55">
+              Built specifically for contractors. Not generic agencies.
             </div>
           </div>
         </div>
