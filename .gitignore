@@ -9,3 +9,7 @@ dist
 .idea
 .vscode
 Thumbs.db
+
+# Local screenshots and source assets that should not be deployed
+Screenshot*.png
+*.tmp.png
