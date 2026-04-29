@@ -233,14 +233,17 @@ function HeroSearchMockup() {
 
       {/* Hero image (real Google search screenshot) */}
       <div className="relative rounded-2xl overflow-hidden border border-line shadow-lifted bg-white">
-        <img
-          src="/heroimage.png"
-          alt="Google search showing Seven Stones Landscape ranked #1 for landscaping contractor near me"
-          className="block w-full h-auto"
-          fetchpriority="high"
-          loading="eager"
-          decoding="async"
-        />
+        <picture>
+          <source srcSet="/heroimage.webp" type="image/webp" />
+          <img
+            src="/heroimage.png"
+            alt="Google search showing Seven Stones Landscape ranked #1 for landscaping contractor near me"
+            className="block w-full h-auto"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async"
+          />
+        </picture>
 
         {/* Client attribution badge */}
         <motion.a
@@ -425,6 +428,8 @@ function WebsiteBeforeAfter() {
       </div>
 
       <div
+        role="img"
+        aria-label="Before and after comparison of contractor website. Drag horizontally to compare."
         className="relative aspect-[16/10] cursor-ew-resize select-none bg-white"
         style={{ touchAction: 'pan-y' }}
         onMouseMove={(e) => {
@@ -438,24 +443,30 @@ function WebsiteBeforeAfter() {
         }}
       >
         {/* AFTER (full layer underneath) */}
-        <img
-          src="/slider2.png"
-          alt="Modern, high-converting contractor website (after)"
-          className="absolute inset-0 w-full h-full object-cover object-top"
-          loading="lazy"
-        />
+        <picture>
+          <source srcSet="/slider2.webp" type="image/webp" />
+          <img
+            src="/slider2.png"
+            alt="Modern, high-converting contractor website (after)"
+            className="absolute inset-0 w-full h-full object-cover object-top"
+            loading="lazy"
+          />
+        </picture>
 
         {/* BEFORE (clipped overlay) */}
         <div
           className="absolute inset-0 overflow-hidden"
           style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
         >
-          <img
-            src="/slider1.png"
-            alt="Outdated contractor website (before)"
-            className="absolute inset-0 w-full h-full object-cover object-top"
-            loading="lazy"
-          />
+          <picture>
+            <source srcSet="/slider1.webp" type="image/webp" />
+            <img
+              src="/slider1.png"
+              alt="Outdated contractor website (before)"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+              loading="lazy"
+            />
+          </picture>
         </div>
 
         {/* Slider handle */}
@@ -496,12 +507,15 @@ function GBPBeforeAfter() {
           <span className="text-[10px] font-bold uppercase text-gRed bg-gRed/10 px-2 py-0.5 rounded">Page 2 · Low Visibility</span>
         </div>
         <div className="relative bg-soft">
-          <img
-            src="/gbpbefore.png"
-            alt="Google search before: Seven Stones Landscape with low visibility, no photos, only 9 reviews"
-            className="block w-full h-auto"
-            loading="lazy"
-          />
+          <picture>
+            <source srcSet="/gbpbefore.webp" type="image/webp" />
+            <img
+              src="/gbpbefore.png"
+              alt="Google search before: Seven Stones Landscape with low visibility, no photos, only 9 reviews"
+              className="block w-full h-auto"
+              loading="lazy"
+            />
+          </picture>
         </div>
         <div className="p-5">
           <ul className="space-y-2 text-sm text-slate1">
@@ -538,12 +552,15 @@ function GBPBeforeAfter() {
           </motion.span>
         </div>
         <div className="relative bg-soft">
-          <img
-            src="/gbpafter.png"
-            alt="Google search after: Seven Stones Landscape ranked Map Pack #1 with 247 reviews and 80+ photos"
-            className="block w-full h-auto"
-            loading="lazy"
-          />
+          <picture>
+            <source srcSet="/gbpafter.webp" type="image/webp" />
+            <img
+              src="/gbpafter.png"
+              alt="Google search after: Seven Stones Landscape ranked Map Pack #1 with 247 reviews and 80+ photos"
+              className="block w-full h-auto"
+              loading="lazy"
+            />
+          </picture>
         </div>
         <div className="p-5">
           <ul className="space-y-2 text-sm text-slate1">
@@ -571,12 +588,15 @@ function AdsBeforeAfter() {
         transition={{ duration: 0.6 }}
         className="bg-white rounded-2xl border border-line shadow-soft overflow-hidden"
       >
-        <img
-          src="/googlebefore.png"
-          alt="Google Ads before: stuck at position 4, $92 per lead, 1.1% click-through rate"
-          className="block w-full h-auto"
-          loading="lazy"
-        />
+        <picture>
+          <source srcSet="/googlebefore.webp" type="image/webp" />
+          <img
+            src="/googlebefore.png"
+            alt="Google Ads before: stuck at position 4, $92 per lead, 1.1% click-through rate"
+            className="block w-full h-auto"
+            loading="lazy"
+          />
+        </picture>
       </motion.div>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -586,12 +606,15 @@ function AdsBeforeAfter() {
         className="bg-white rounded-2xl border-2 border-brand/30 shadow-lifted overflow-hidden relative"
       >
         <div className="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-brand via-blue to-brand z-10" />
-        <img
-          src="/googleafter.png"
-          alt="Google Ads after: top of page at position 1, $26 per lead, 7.8% click-through rate"
-          className="block w-full h-auto"
-          loading="lazy"
-        />
+        <picture>
+          <source srcSet="/googleafter.webp" type="image/webp" />
+          <img
+            src="/googleafter.png"
+            alt="Google Ads after: top of page at position 1, $26 per lead, 7.8% click-through rate"
+            className="block w-full h-auto"
+            loading="lazy"
+          />
+        </picture>
       </motion.div>
     </div>
   );
@@ -1482,13 +1505,28 @@ function FAQ() {
                 transition={{ delay: i * 0.04 }}
                 className={`bg-white rounded-xl border transition-all overflow-hidden ${isOpen ? 'border-blue/40 shadow-soft' : 'border-line'}`}
               >
-                <button onClick={() => setOpen(isOpen ? -1 : i)} className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left">
+                <button
+                  onClick={() => setOpen(isOpen ? -1 : i)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${i}`}
+                  id={`faq-q-${i}`}
+                  className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/40 rounded-xl"
+                >
                   <span className="font-semibold text-ink">{f.q}</span>
-                  <ChevronDown className={`h-5 w-5 text-blue transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`h-5 w-5 text-blue transition-transform shrink-0 ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true" />
                 </button>
                 <AnimatePresence initial={false}>
                   {isOpen && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
+                    <motion.div
+                      id={`faq-panel-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-q-${i}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
                       <div className="px-6 pb-5 text-slate1 leading-relaxed border-t border-line pt-4">{f.a}</div>
                     </motion.div>
                   )}
@@ -1579,8 +1617,14 @@ function Footer() {
 export default function App() {
   return (
     <div className="min-h-screen bg-white text-ink antialiased overflow-x-hidden">
+      <a
+        href="#top"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-brand focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <TrustStrip />
         <Results />
