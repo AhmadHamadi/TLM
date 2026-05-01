@@ -1019,7 +1019,7 @@ function CTA() {
             and what needs to be fixed first. No pressure, no fluff.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-            <a href="mailto:info@tradeleadsmarketing.ca" className="btn-primary text-base px-7 py-3.5 animate-pulseGlow">
+            <a href="mailto:info@tradeleadsmarketing.com" className="btn-primary text-base px-7 py-3.5 animate-pulseGlow">
               Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+12894891167" className="btn-ghost-dark">
@@ -1261,7 +1261,7 @@ function Packages() {
 }
 
 /* ============================================================
-   CONTACT FORM — sends via /api/lead → SMTP → info@tradeleadsmarketing.ca
+   CONTACT FORM — sends via /api/lead → SMTP → info@tradeleadsmarketing.com
    ============================================================ */
 function ContactForm() {
   const [data, setData] = useState({
@@ -1287,7 +1287,7 @@ function ContactForm() {
       });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
-        throw new Error(j.error || 'Submission failed. Please email info@tradeleadsmarketing.ca directly.');
+        throw new Error(j.error || 'Submission failed. Please email info@tradeleadsmarketing.com directly.');
       }
       setStatus({ state: 'sent', error: null });
       setData({ name: '', business: '', email: '', phone: '', city: '', service: '', message: '', website: '' });
@@ -1326,11 +1326,11 @@ function ContactForm() {
               </div>
               (289) 489-1167
             </a>
-            <a href="mailto:info@tradeleadsmarketing.ca" className="flex items-center gap-3 text-ink font-semibold hover:text-blue">
+            <a href="mailto:info@tradeleadsmarketing.com" className="flex items-center gap-3 text-ink font-semibold hover:text-blue">
               <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
                 <Mail className="h-4 w-4 text-blue" />
               </div>
-              info@tradeleadsmarketing.ca
+              info@tradeleadsmarketing.com
             </a>
             <div className="flex items-center gap-3 text-slate1">
               <div className="h-10 w-10 rounded-lg bg-bluesoft flex items-center justify-center">
@@ -1488,7 +1488,7 @@ function FAQ() {
           <motion.p variants={fadeUp} className="mt-4 text-slate1 leading-relaxed">
             Still have questions? Send us a message and we'll get back the same day. No auto-responses.
           </motion.p>
-          <motion.a variants={fadeUp} href="mailto:info@tradeleadsmarketing.ca" className="btn-blue mt-6">
+          <motion.a variants={fadeUp} href="mailto:info@tradeleadsmarketing.com" className="btn-blue mt-6">
             <Mail className="h-4 w-4" /> Email us
           </motion.a>
         </motion.div>
@@ -1587,8 +1587,8 @@ function Footer() {
             <a href="tel:+12894891167" className="text-white/85 hover:text-brand transition-colors flex items-center gap-2">
               <Phone className="h-4 w-4" /> (289) 489-1167
             </a>
-            <a href="mailto:info@tradeleadsmarketing.ca" className="mt-2 text-white/85 hover:text-brand transition-colors flex items-center gap-2">
-              <Mail className="h-4 w-4" /> info@tradeleadsmarketing.ca
+            <a href="mailto:info@tradeleadsmarketing.com" className="mt-2 text-white/85 hover:text-brand transition-colors flex items-center gap-2">
+              <Mail className="h-4 w-4" /> info@tradeleadsmarketing.com
             </a>
             <div className="mt-3 text-white/55 text-sm">Serving contractors across North America.</div>
             <div className="mt-4 text-xs text-white/55">
