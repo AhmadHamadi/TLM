@@ -137,11 +137,11 @@ function Navbar() {
   }, []);
 
   const links = [
-    { href: '#packages', label: 'Packages' },
-    { href: '#results',  label: 'Results' },
-    { href: '#process',  label: 'Process' },
+    { href: '#results',      label: 'Results' },
     { href: '#testimonials', label: 'Testimonials' },
-    { href: '#faq',      label: 'FAQ' }
+    { href: '#process',      label: 'Process' },
+    { href: '#packages',     label: 'Packages' },
+    { href: '#faq',          label: 'FAQ' }
   ];
 
   return (
@@ -1521,9 +1521,9 @@ export default function App() {
         <TrustStrip />
         <Results />
         <Testimonials />
-        <Packages />
         <WhyUs />
         <Process />
+        <Packages />
         <FAQ />
         <ContactForm />
       </main>
