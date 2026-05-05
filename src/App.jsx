@@ -808,51 +808,7 @@ function Testimonials() {
 }
 
 /* ============================================================
-   8. PROBLEM SECTION
-   ============================================================ */
-function ProblemSection() {
-  const pains = [
-    { icon: DollarSign, title: 'Wasted ad spend', desc: 'You spend money on ads but never know which keywords actually book jobs.' },
-    { icon: Globe,      title: "Site that doesn't convert", desc: 'Visitors land, scroll, and leave. No quote request, no call.' },
-    { icon: MapPin,     title: 'Weak Google Business Profile', desc: 'You\'re invisible in the map pack while competitors stack reviews.' },
-    { icon: Search,     title: 'SEO ignored',     desc: 'No structure, no content, no rankings for "near me" service searches.' },
-    { icon: Phone,      title: 'Leads not tracked', desc: 'Calls and forms are vanishing into a black box. No source. No data.' },
-    { icon: BarChart3,  title: 'Reports, not jobs', desc: 'Agencies send pretty PDFs. None of it ties back to booked work.' }
-  ];
-
-  return (
-    <Section id="problem" className="bg-white">
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14 max-w-3xl mx-auto">
-        <motion.span variants={fadeUp} className="eyebrow-light">The Real Problem</motion.span>
-        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
-          Most Contractors Don't Have a Marketing Problem.<br />
-          <span className="text-blue">They Have a Tracking Problem.</span>
-        </motion.h2>
-        <motion.p variants={fadeUp} className="mt-5 text-slate1 text-lg">
-          You can't fix what you can't see. Here's what's quietly killing your ROI right now.
-        </motion.p>
-      </motion.div>
-
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {pains.map((p) => {
-          const Icon = p.icon;
-          return (
-            <motion.div key={p.title} variants={fadeUp} className="bg-white rounded-2xl border border-line p-6 hover:border-brand/40 hover:shadow-soft transition-all duration-300 group">
-              <div className="h-11 w-11 rounded-xl bg-gRed/10 border border-gRed/20 flex items-center justify-center group-hover:bg-brand/10 group-hover:border-brand/30 transition-colors">
-                <Icon className="h-5 w-5 text-gRed group-hover:text-brand transition-colors" />
-              </div>
-              <h3 className="mt-4 text-lg font-bold text-ink">{p.title}</h3>
-              <p className="mt-2 text-slate1 leading-relaxed">{p.desc}</p>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-    </Section>
-  );
-}
-
-/* ============================================================
-   10. WHY US — split, white background
+   WHY US — split, white background
    ============================================================ */
 function WhyUs() {
   const points = [
@@ -880,24 +836,6 @@ function WhyUs() {
           <a href="#audit" className="btn-primary mt-8">
             Get a Free Audit <ArrowRight className="h-4 w-4" />
           </a>
-
-          {/* Trust cards */}
-          <div className="grid grid-cols-3 gap-3 mt-10">
-            {[
-              { icon: ShieldCheck,  l: 'Contractor-Only', s: 'Specialty Focus' },
-              { icon: ThumbsUp,     l: 'Month-to-Month', s: 'No long contracts' },
-              { icon: Activity,     l: 'Tracked',         s: 'From Day One' }
-            ].map((b) => {
-              const Icon = b.icon;
-              return (
-                <div key={b.l} className="text-center p-4 rounded-xl border border-line">
-                  <Icon className="h-5 w-5 text-blue mx-auto" />
-                  <div className="font-bold text-ink mt-2 text-sm">{b.l}</div>
-                  <div className="text-[10px] text-slate2 uppercase tracking-wider mt-0.5">{b.s}</div>
-                </div>
-              );
-            })}
-          </div>
         </motion.div>
 
         <motion.ul initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }} variants={stagger} className="space-y-3">
@@ -987,52 +925,6 @@ function Process() {
           </div>
         </div>
       </div>
-    </Section>
-  );
-}
-
-/* ============================================================
-   12. CTA
-   ============================================================ */
-function CTA() {
-  return (
-    <Section id="contact" className="bg-white">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-charcoal to-navydeep p-10 md:p-16 text-center"
-      >
-        <div className="absolute -top-32 -left-32 h-72 w-72 rounded-full bg-blue/30 blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 h-72 w-72 rounded-full bg-brand/30 blur-3xl" />
-        <div className="absolute inset-0 grid-bg-dark opacity-30" />
-
-        <div className="relative">
-          <span className="eyebrow-dark">Ready When You Are</span>
-          <h2 className="h-display text-4xl md:text-6xl text-white mt-4 max-w-3xl mx-auto">
-            Ready to Stop Guessing and<br className="hidden md:block" />
-            <span className="text-brand">Start Getting Better Leads?</span>
-          </h2>
-          <p className="mt-6 max-w-2xl mx-auto text-white/75 text-lg">
-            Book a free audit and we'll show you what's working, what's wasting money,
-            and what needs to be fixed first. No pressure, no fluff.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-            <a href="mailto:info@tradeleadsmarketing.com" className="btn-primary text-base px-7 py-3.5 animate-pulseGlow">
-              Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
-            </a>
-            <a href="tel:+12894891167" className="btn-ghost-dark">
-              <Phone className="h-4 w-4" /> (289) 489-1167
-            </a>
-          </div>
-          <div className="mt-6 flex items-center justify-center gap-6 flex-wrap text-xs text-white/60">
-            <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> 30-min call</div>
-            <div className="flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5 text-gGreen" /> No obligation</div>
-            <div className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-gGreen" /> Contractor-focused</div>
-          </div>
-        </div>
-      </motion.div>
     </Section>
   );
 }
@@ -1629,11 +1521,9 @@ export default function App() {
         <TrustStrip />
         <Results />
         <Testimonials />
-        <ProblemSection />
         <Packages />
         <WhyUs />
         <Process />
-        <CTA />
         <FAQ />
         <ContactForm />
       </main>
