@@ -54,7 +54,7 @@ const TRADES = [
   { key: 'pest',       label: 'Pest Control',            cplLo: 40,  cplHi: 120, job: 550 },
   { key: 'cleaning',   label: 'Cleaning / Janitorial',   cplLo: 30,  cplHi: 100, job: 500 },
   { key: 'handyman',   label: 'Handyman',                cplLo: 35,  cplHi: 90,  job: 450 },
-  // Different vertical (CliniMedia). CPL = enquiry cost (CPC $5.75–8.25 ÷ 10% LP
+  // Cosmetic vertical. CPL = enquiry cost (CPC $5.75–8.25 ÷ 10% landing-page
   // conversion); job = average first visit. Selecting this reskins the calculator.
   { key: 'medspa',     label: 'Cosmetic / Med Spa (injectables)', cplLo: 58, cplHi: 83, job: 550 }
 ];
