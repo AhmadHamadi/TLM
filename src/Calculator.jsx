@@ -2,19 +2,59 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import {
   ArrowRight, ArrowLeft, DollarSign, Users, Phone, RotateCcw,
-  Wallet, Sparkles, Scale
+  Wallet, Sparkles, Scale, ChevronDown
 } from 'lucide-react';
 
 /* ============================================================
-   TRADE LEADS MARKETING — BREAK-EVEN CALCULATOR
+   TRADE LEADS MARKETING — BREAK-EVEN + LEADS CALCULATOR
    Standalone page (/calculator). Dead simple, on purpose.
 
-   The whole idea, in plain English:
-     jobsToBreakEven = monthly spend  ÷  what one job is worth
-   "We bring you the leads. Close this many and you've made your
-    money back. Everything after that is extra."
-   No margins, no close rate, no jargon.
+   Pick a trade → we estimate leads from the ad budget (each trade
+   has its own cost-per-lead range). Then:
+     leadsRange     = spend / costPerLead(range for the trade)
+     jobsToBreakEven= ceil(spend / whatOneJobIsWorth)
+   "We bring you the leads. Close this many to make your money back —
+    everything after that is profit."
+   CPL + typical job values are paid-search benchmarks (see notes at
+   bottom of this file). Numbers are estimates, tuned to be honest.
    ============================================================ */
+
+/* ---------- Trade benchmarks: cost-per-lead range + typical job value ----------
+   cplLo/cplHi = Google Ads SEARCH cost per lead (USD, a call or form fill) —
+   NOT LSA or shared-marketplace leads, which price differently.
+   job = typical ticket for a PAID-SEARCH-acquired customer (skews to
+   installs/replacements, above the blended consumer average).
+   Sourced from 2024-26 benchmarks — LocaliQ Home Services (large-N medians) +
+   SearchLight Digital (2026 account aggregates) as anchors, cross-checked
+   against trade-specific agency data. Full sourcing in CALCULATOR-BENCHMARKS.md.
+   All figures USD (× ~1.37 for CAD).                                            */
+const TRADES = [
+  { key: 'roofing',    label: 'Roofing',                 cplLo: 90,  cplHi: 220, job: 10000 },
+  { key: 'hvac',       label: 'HVAC',                    cplLo: 90,  cplHi: 200, job: 8000 },
+  { key: 'plumbing',   label: 'Plumbing',                cplLo: 90,  cplHi: 185, job: 1700 },
+  { key: 'electrical', label: 'Electrical',              cplLo: 90,  cplHi: 165, job: 2000 },
+  { key: 'solar',      label: 'Solar',                   cplLo: 65,  cplHi: 250, job: 25000 },
+  { key: 'windows',    label: 'Windows & Doors',         cplLo: 75,  cplHi: 250, job: 9500 },
+  { key: 'siding',     label: 'Siding',                  cplLo: 120, cplHi: 300, job: 13000 },
+  { key: 'landscaping',label: 'Landscaping',             cplLo: 85,  cplHi: 150, job: 6500 },
+  { key: 'concrete',   label: 'Concrete',                cplLo: 70,  cplHi: 175, job: 5500 },
+  { key: 'paving',     label: 'Paving / Asphalt',        cplLo: 80,  cplHi: 200, job: 5500 },
+  { key: 'masonry',    label: 'Masonry',                 cplLo: 80,  cplHi: 300, job: 6000 },
+  { key: 'fencing',    label: 'Fencing',                 cplLo: 50,  cplHi: 130, job: 6000 },
+  { key: 'decks',      label: 'Decks',                   cplLo: 40,  cplHi: 130, job: 16000 },
+  { key: 'excavation', label: 'Excavation',              cplLo: 60,  cplHi: 200, job: 8000 },
+  { key: 'tree',       label: 'Tree Service',            cplLo: 35,  cplHi: 90,  job: 2000 },
+  { key: 'pools',      label: 'Pools (inground builder)',cplLo: 75,  cplHi: 300, job: 60000 },
+  { key: 'remodel',    label: 'Kitchen & Bath Remodel',  cplLo: 120, cplHi: 350, job: 27000 },
+  { key: 'gc',         label: 'General Contractor / Reno',cplLo: 110,cplHi: 350, job: 45000 },
+  { key: 'painting',   label: 'Painting',                cplLo: 70,  cplHi: 200, job: 4500 },
+  { key: 'flooring',   label: 'Flooring',                cplLo: 60,  cplHi: 150, job: 4000 },
+  { key: 'drywall',    label: 'Drywall / Insulation',    cplLo: 70,  cplHi: 250, job: 2500 },
+  { key: 'garage',     label: 'Garage Doors',            cplLo: 80,  cplHi: 200, job: 1300 },
+  { key: 'pest',       label: 'Pest Control',            cplLo: 40,  cplHi: 120, job: 550 },
+  { key: 'cleaning',   label: 'Cleaning / Janitorial',   cplLo: 30,  cplHi: 100, job: 500 },
+  { key: 'handyman',   label: 'Handyman',                cplLo: 35,  cplHi: 90,  job: 450 }
+];
 
 /* ---------- Formatting helpers ---------- */
 const money = (v) => '$' + Math.round(Math.max(0, v)).toLocaleString('en-US');
@@ -68,10 +108,10 @@ function NumberField({ value, onChange, min, max, prefix }) {
   );
 }
 
-/* ---------- One input row: label + centered value + slider ---------- */
+/* ---------- One slider row: label + centered value + slider ---------- */
 function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, prefix }) {
   return (
-    <div className="py-5 first:pt-0 last:pb-0 border-b border-line last:border-0">
+    <div className="py-5 border-b border-line last:border-0">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="flex items-start gap-3">
           <div className="h-10 w-10 shrink-0 rounded-lg bg-bluesoft flex items-center justify-center">
@@ -85,11 +125,7 @@ function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, pr
         <NumberField value={value} onChange={onChange} min={min} max={max} prefix={prefix} />
       </div>
       <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
+        type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full h-2 rounded-full appearance-none cursor-pointer accent-brand bg-line"
         aria-label={label}
@@ -103,7 +139,7 @@ function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, pr
 }
 
 /* ---------- A big stat tile ---------- */
-function Tile({ icon: Icon, label, value, format, tone = 'blue' }) {
+function Tile({ icon: Icon, label, children, tone = 'blue' }) {
   const toneMap = {
     blue: 'bg-bluesoft text-blue',
     brand: 'bg-brand/10 text-brand',
@@ -117,29 +153,36 @@ function Tile({ icon: Icon, label, value, format, tone = 'blue' }) {
         </div>
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate2">{label}</div>
       </div>
-      <div className="mt-3 text-4xl font-black text-ink">
-        <AnimatedValue value={value} format={format} />
-      </div>
+      <div className="mt-3 text-3xl md:text-4xl font-black text-ink">{children}</div>
     </div>
   );
 }
 
 export default function Calculator() {
+  const [tradeKey, setTradeKey] = useState('roofing');
   const [spend, setSpend] = useState(3000);
-  const [jobValue, setJobValue] = useState(8000);
-  const [leads, setLeads] = useState(50);
+  const trade = TRADES.find((t) => t.key === tradeKey) || TRADES[0];
+  const [jobValue, setJobValue] = useState(trade.job);
 
-  const reset = () => { setSpend(3000); setJobValue(8000); setLeads(50); };
+  const pickTrade = (key) => {
+    setTradeKey(key);
+    const t = TRADES.find((x) => x.key === key);
+    if (t) setJobValue(t.job);
+  };
+  const reset = () => { setTradeKey('roofing'); setSpend(3000); setJobValue(TRADES[0].job); };
 
-  /* ---- The whole calculation ---- */
+  /* ---- Estimate leads from the trade's cost-per-lead range ---- */
+  const leadsLo = Math.max(1, Math.round(spend / trade.cplHi)); // conservative (higher CPL = fewer)
+  const leadsHi = Math.max(leadsLo, Math.round(spend / trade.cplLo));
+  const leadsN = leadsLo; // conservative number used for the break-even story + bar
+
+  /* ---- Break-even: how many jobs to make the money back ---- */
   const breakEvenExact = jobValue > 0 ? spend / jobValue : 0;
-  // You close whole jobs, so round up to the next whole job.
-  const jobsToBreakEven = breakEvenExact > 0 ? Math.ceil(breakEvenExact) : 0;
-  const feasible = leads > 0 && jobsToBreakEven <= leads;
-  const extraJobs = Math.max(0, leads - jobsToBreakEven);
+  const jobsToBreakEven = breakEvenExact > 0 ? Math.ceil(breakEvenExact) : 0; // whole jobs
+  const feasible = leadsN > 0 && jobsToBreakEven <= leadsN;
+  const extraJobs = Math.max(0, leadsN - jobsToBreakEven);
 
-  // Leads bar proportions
-  const bePct = leads > 0 ? clamp((jobsToBreakEven / leads) * 100, 0, 100) : 0;
+  const bePct = leadsN > 0 ? clamp((jobsToBreakEven / leadsN) * 100, 0, 100) : 0;
   const extraPct = 100 - bePct;
 
   return (
@@ -153,7 +196,7 @@ export default function Calculator() {
             </div>
             <div className="leading-tight">
               <div className="font-extrabold tracking-tight text-ink">Trade Leads</div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-brand font-bold -mt-0.5">Break-Even Calculator</div>
+              <div className="text-[10px] uppercase tracking-[0.25em] text-brand font-bold -mt-0.5">Lead Calculator</div>
             </div>
           </a>
           <div className="flex items-center gap-2">
@@ -174,11 +217,11 @@ export default function Calculator() {
             <span className="h-1.5 w-1.5 rounded-full bg-blue" /> The math is simple
           </span>
           <h1 className="h-display text-4xl md:text-5xl text-ink mt-4">
-            How many jobs to <span className="text-blue">make your money back?</span>
+            How many leads can we get you — and <span className="text-blue">how fast does it pay off?</span>
           </h1>
           <p className="mt-4 text-slate1 text-lg leading-relaxed">
-            Enter what you spend and what one job is worth. We'll show how many of the leads we bring
-            you need to close to break even — <span className="font-semibold text-ink">everything after that is extra</span>.
+            Pick your trade and your budget. We'll estimate the leads that budget brings in, and how few
+            jobs it takes to make your money back. <span className="font-semibold text-ink">Everything after that is profit.</span>
           </p>
         </div>
 
@@ -196,17 +239,34 @@ export default function Calculator() {
               </button>
             </div>
 
+            {/* Trade dropdown */}
+            <div className="py-5 border-b border-line">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-10 w-10 shrink-0 rounded-lg bg-bluesoft flex items-center justify-center">
+                  <Scale className="h-5 w-5 text-blue" />
+                </div>
+                <div className="font-bold text-ink text-[15px]">What kind of work do you do?</div>
+              </div>
+              <div className="relative">
+                <select
+                  value={tradeKey}
+                  onChange={(e) => pickTrade(e.target.value)}
+                  className="w-full appearance-none rounded-lg border border-line bg-white pl-4 pr-10 py-3 text-ink font-bold focus:outline-none focus:border-blue focus:ring-4 focus:ring-blue/10 transition-all cursor-pointer"
+                  aria-label="Type of business"
+                >
+                  {TRADES.map((t) => <option key={t.key} value={t.key}>{t.label}</option>)}
+                </select>
+                <ChevronDown className="h-5 w-5 text-slate2 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+
             <InputRow
-              icon={Wallet} label="What you spend a month" hint="Your total monthly marketing budget"
+              icon={Wallet} label="What you spend a month" hint="Your monthly Google Ads budget"
               value={spend} onChange={setSpend} min={500} max={25000} step={100} prefix="$"
             />
             <InputRow
-              icon={DollarSign} label="What one job is worth" hint="Your average job value"
-              value={jobValue} onChange={setJobValue} min={500} max={60000} step={250} prefix="$"
-            />
-            <InputRow
-              icon={Users} label="Leads we bring you a month" hint="Roughly how many leads you get"
-              value={leads} onChange={setLeads} min={1} max={500} step={1}
+              icon={DollarSign} label="What one job is worth" hint={`Typical ${trade.label.toLowerCase()} job — edit to match yours`}
+              value={jobValue} onChange={setJobValue} min={300} max={80000} step={250} prefix="$"
             />
           </div>
 
@@ -216,27 +276,36 @@ export default function Calculator() {
             <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-navy via-charcoal to-navydeep text-white shadow-glow p-7 md:p-10">
               <div className="absolute inset-0 grid-bg-dark opacity-40" />
               <div className="relative">
-                <div className="text-xs font-bold uppercase tracking-widest text-white/60">Close just</div>
-                <div className="flex items-end gap-3 mt-1">
-                  <div className="text-7xl md:text-8xl font-black text-brand leading-none">
-                    <AnimatedValue value={jobsToBreakEven} format={whole} />
-                  </div>
-                  <div className="text-3xl md:text-4xl font-black text-white mb-1.5">
-                    {jobsToBreakEven === 1 ? 'job' : 'jobs'}
-                  </div>
+                <div className="text-xs font-bold uppercase tracking-widest text-white/60">
+                  {trade.label} · {money(spend)}/mo in ads
                 </div>
-                <div className="text-white/75 mt-4 text-lg leading-relaxed max-w-xl">
-                  and you've made your <span className="font-bold text-white">{money(spend)}</span> back.
-                  {feasible && (
-                    <> That's just <span className="font-bold text-brand">{whole(jobsToBreakEven)}</span> of
-                    the <span className="font-bold text-white">{whole(leads)}</span> leads we bring you every month.</>
+                <div className="text-white/70 mt-3">We'd aim to bring you about</div>
+                <div className="flex items-end gap-3 mt-1">
+                  <div className="text-6xl md:text-7xl font-black text-brand leading-none flex items-end">
+                    <AnimatedValue value={leadsLo} format={whole} />
+                    <span className="text-white/40 mx-1">–</span>
+                    <AnimatedValue value={leadsHi} format={whole} />
+                  </div>
+                  <div className="text-2xl md:text-3xl font-black text-white mb-1">leads<span className="text-white/50 text-lg font-bold">/mo</span></div>
+                </div>
+                <div className="text-[12px] text-white/45 mt-2">
+                  Based on {trade.label.toLowerCase()} leads at about {money(trade.cplLo)}–{money(trade.cplHi)} each on Google Ads
+                </div>
+
+                <div className="text-white/75 mt-5 text-lg leading-relaxed max-w-xl">
+                  {feasible ? (
+                    <>You'd only need to close <span className="font-bold text-brand">{whole(jobsToBreakEven)}</span> of
+                    them to make your <span className="font-bold text-white">{money(spend)}</span> back.</>
+                  ) : (
+                    <>At this job size you'd need <span className="font-bold text-brand">{whole(jobsToBreakEven)}</span> jobs
+                    to make your <span className="font-bold text-white">{money(spend)}</span> back — worth raising the budget or targeting bigger jobs.</>
                   )}
                 </div>
 
                 {/* Leads bar */}
                 <div className="mt-8">
                   <div className="flex justify-between text-[11px] font-semibold text-white/55 mb-2">
-                    <span>Your {whole(leads)} leads this month</span>
+                    <span>Your ~{whole(leadsN)} leads this month</span>
                     <span>{feasible ? `${whole(extraJobs)} left over` : 'need more leads'}</span>
                   </div>
                   <div className="h-5 rounded-full bg-white/10 overflow-hidden flex">
@@ -255,8 +324,8 @@ export default function Calculator() {
                 <div className="mt-7 flex items-start gap-2.5 rounded-xl bg-white/5 border border-white/10 px-4 py-3.5">
                   <Sparkles className="h-5 w-5 text-brand shrink-0 mt-0.5" />
                   <p className="text-white/85 leading-snug">
-                    Every job you close after that is another{' '}
-                    <span className="font-black text-white">{money(jobValue)}</span> in your pocket.
+                    Every job you close is worth about{' '}
+                    <span className="font-black text-white">{money(jobValue)}</span> — the rest is upside.
                   </p>
                 </div>
               </div>
@@ -264,9 +333,15 @@ export default function Calculator() {
 
             {/* Simple stat tiles */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
-              <Tile icon={Scale} tone="brand" label="Jobs to break even" value={jobsToBreakEven} format={whole} />
-              <Tile icon={Users} tone="blue" label="Leads a month" value={leads} format={whole} />
-              <Tile icon={DollarSign} tone="green" label="Each job worth" value={jobValue} format={money} />
+              <Tile icon={Users} tone="brand" label="Leads a month">
+                <AnimatedValue value={leadsLo} format={whole} />–<AnimatedValue value={leadsHi} format={whole} />
+              </Tile>
+              <Tile icon={Scale} tone="blue" label="Jobs to break even">
+                <AnimatedValue value={jobsToBreakEven} format={whole} />
+              </Tile>
+              <Tile icon={DollarSign} tone="green" label="Each job worth">
+                <AnimatedValue value={jobValue} format={money} />
+              </Tile>
             </div>
 
             {/* CTA */}
@@ -286,10 +361,11 @@ export default function Calculator() {
 
         {/* Disclaimer */}
         <p className="mt-10 text-xs text-slate2 leading-relaxed max-w-3xl">
-          <span className="font-bold text-slate1">Estimate only.</span> Break-even here means what you spend ÷ what one
-          job is worth, rounded up to a whole job. We deliver the leads; whether they turn into jobs depends on your
-          pricing, sales process, and market. These numbers illustrate the idea — they're not a promise of a specific
-          result.
+          <span className="font-bold text-slate1">Estimate only.</span> Lead counts are based on typical paid-search
+          cost-per-lead ranges for each trade and your budget; actual results vary with your market, competition,
+          season, and campaign quality. Break-even is what you spend ÷ what one job is worth, rounded up to a whole
+          job. We deliver the leads; whether they become jobs depends on your pricing and sales process. These numbers
+          illustrate the idea — they're not a promise of a specific result.
         </p>
       </main>
     </div>
