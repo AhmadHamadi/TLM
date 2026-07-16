@@ -362,6 +362,83 @@ function Hero() {
 }
 
 /* ============================================================
+   2.5 GUARANTEE BANNER — risk reversal, directly under the hero
+   Flat, editorial, near-black. One accent. Custom stamp, no clip-art.
+   ============================================================ */
+function GuaranteeStamp({ className = '' }) {
+  return (
+    <svg viewBox="0 0 200 200" className={className} role="img" aria-label="30-day guarantee: 3 bookings or you don't pay">
+      {/* Two flat rings — no gloss, no shadow */}
+      <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="100" cy="100" r="83" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+      {/* Stacked type, like a rubber stamp */}
+      <text x="100" y="56" textAnchor="middle" fontFamily="ui-monospace, monospace" fontSize="8.5" fontWeight="700" letterSpacing="2.5" fill="currentColor">OR YOU DON'T PAY</text>
+      <line x1="66" y1="66" x2="134" y2="66" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+      <text x="100" y="118" textAnchor="middle" fontFamily='"Plus Jakarta Sans", sans-serif' fontSize="60" fontWeight="800" fill="currentColor">3</text>
+      <text x="100" y="138" textAnchor="middle" fontFamily="ui-monospace, monospace" fontSize="13" fontWeight="700" letterSpacing="4" fill="currentColor">BOOKINGS</text>
+      <line x1="66" y1="150" x2="134" y2="150" stroke="currentColor" strokeWidth="1" opacity="0.4" />
+      <text x="100" y="166" textAnchor="middle" fontFamily="ui-monospace, monospace" fontSize="8.5" fontWeight="700" letterSpacing="2" fill="currentColor">30-DAY GUARANTEE</text>
+    </svg>
+  );
+}
+
+function GuaranteeBanner() {
+  const terms = [
+    { t: 'Month-to-month', s: 'No long contracts. Cancel anytime.' },
+    { t: 'Tracking first',  s: 'Call & form tracking before we spend a dollar.' },
+    { t: 'You set the bar', s: 'You approve what counts as a qualified booking.' }
+  ];
+  return (
+    <section className="relative bg-[#0A0B0D] text-white">
+      <div className="h-[3px] w-full bg-brand" />
+      <div className="mx-auto max-w-7xl px-6 md:px-10 py-14 md:py-16">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* LEFT — the promise, set like letterhead */}
+          <div className="lg:col-span-8">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="font-mono text-[11px] tracking-[0.4em] text-brand uppercase">Our Guarantee</span>
+              <span className="h-px w-20 bg-white/20" />
+            </div>
+            <h2 className="font-display font-extrabold tracking-tight leading-[0.95] text-[2.4rem] sm:text-5xl lg:text-[4rem]">
+              3 qualified bookings in your<br className="hidden sm:block" /> first 30 days.{' '}
+              <span className="text-brand">Or you don't pay.</span>
+            </h2>
+
+            <div className="mt-9 grid sm:grid-cols-3 border-y border-white/10 divide-y sm:divide-y-0 sm:divide-x divide-white/10">
+              {terms.map((x) => (
+                <div key={x.t} className="py-4 sm:px-6 first:sm:pl-0">
+                  <div className="font-mono text-[10px] tracking-[0.25em] uppercase text-brand/90 mb-1.5">{x.t}</div>
+                  <div className="text-sm text-white/65 leading-snug">{x.s}</div>
+                </div>
+              ))}
+            </div>
+
+            <p className="mt-6 text-xs text-white/40 max-w-xl leading-relaxed">
+              Full terms — including the definition of a qualified booking — are set out in your service agreement.
+            </p>
+          </div>
+
+          {/* RIGHT — stamp + action, divided by a hairline */}
+          <div className="lg:col-span-4 lg:pl-12 lg:border-l lg:border-white/10">
+            <div className="flex flex-col items-center lg:items-start gap-8">
+              <GuaranteeStamp className="w-36 h-36 text-brand -rotate-6" />
+              <div className="w-full">
+                <a href="#audit" className="btn-primary w-full text-base py-4">
+                  Claim Your Guarantee <ArrowRight className="h-4 w-4" />
+                </a>
+                <div className="mt-3 text-center lg:text-left text-[11px] text-white/40">
+                  Starts with a free audit. No obligation, no pressure.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
    3. TRUST STRIP — industries served
    ============================================================ */
 function TrustStrip() {
@@ -1491,7 +1568,7 @@ function Footer() {
 
         <div className="mt-12 pt-6 border-t border-white/10 space-y-3 text-xs text-white/50">
           <p className="leading-relaxed max-w-4xl">
-            <span className="font-bold text-white/70">Disclaimer:</span> Trade Leads Marketing does not guarantee specific lead volume, ranking position, or revenue outcomes. Results depend on factors including market competition, budget, service area, seasonality, and the contractor's own sales process. Examples and case studies on this site reflect outcomes from specific past campaigns and are not predictive of future performance. Google&trade;, Google Ads&trade;, and Google Business Profile&trade; are trademarks of Google LLC, used here for descriptive purposes; Trade Leads Marketing is not affiliated with or endorsed by Google.
+            <span className="font-bold text-white/70">Disclaimer:</span> Except where an explicit written guarantee applies (such as our 30-day guarantee, which is subject to its own qualifying terms and the definition of a qualified booking agreed in your service agreement), Trade Leads Marketing does not guarantee specific lead volume, ranking position, or revenue outcomes. Results depend on factors including market competition, budget, service area, seasonality, and the contractor's own sales process. Examples and case studies on this site reflect outcomes from specific past campaigns and are not predictive of future performance. Google&trade;, Google Ads&trade;, and Google Business Profile&trade; are trademarks of Google LLC, used here for descriptive purposes; Trade Leads Marketing is not affiliated with or endorsed by Google.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/10">
             <div>© {new Date().getFullYear()} Trade Leads Marketing. All rights reserved.</div>
@@ -1518,6 +1595,7 @@ export default function App() {
       <Navbar />
       <main id="main-content">
         <Hero />
+        <GuaranteeBanner />
         <TrustStrip />
         <Results />
         <Testimonials />
