@@ -53,7 +53,10 @@ const TRADES = [
   { key: 'garage',     label: 'Garage Doors',            cplLo: 80,  cplHi: 200, job: 1300 },
   { key: 'pest',       label: 'Pest Control',            cplLo: 40,  cplHi: 120, job: 550 },
   { key: 'cleaning',   label: 'Cleaning / Janitorial',   cplLo: 30,  cplHi: 100, job: 500 },
-  { key: 'handyman',   label: 'Handyman',                cplLo: 35,  cplHi: 90,  job: 450 }
+  { key: 'handyman',   label: 'Handyman',                cplLo: 35,  cplHi: 90,  job: 450 },
+  // Different vertical (CliniMedia). CPL = enquiry cost (CPC $5.75–8.25 ÷ 10% LP
+  // conversion); job = average first visit. Selecting this reskins the calculator.
+  { key: 'medspa',     label: 'Cosmetic / Med Spa (injectables)', cplLo: 58, cplHi: 83, job: 550 }
 ];
 
 /* ---------- Formatting helpers ---------- */
@@ -109,13 +112,13 @@ function NumberField({ value, onChange, min, max, prefix }) {
 }
 
 /* ---------- One slider row: label + centered value + slider ---------- */
-function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, prefix }) {
+function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, prefix, tint, iconColor, sliderColor }) {
   return (
     <div className="py-5 border-b border-line last:border-0">
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="flex items-start gap-3">
-          <div className="h-10 w-10 shrink-0 rounded-lg bg-bluesoft flex items-center justify-center">
-            <Icon className="h-5 w-5 text-blue" />
+          <div className="h-10 w-10 shrink-0 rounded-lg flex items-center justify-center" style={{ background: tint }}>
+            <Icon className="h-5 w-5" style={{ color: iconColor }} />
           </div>
           <div>
             <div className="font-bold text-ink leading-tight text-[15px]">{label}</div>
@@ -127,7 +130,8 @@ function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, pr
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 rounded-full appearance-none cursor-pointer accent-brand bg-line"
+        className="w-full h-2 rounded-full appearance-none cursor-pointer bg-line"
+        style={{ accentColor: sliderColor }}
         aria-label={label}
       />
       <div className="flex justify-between text-[11px] text-slate3 font-semibold mt-1.5">
@@ -139,16 +143,11 @@ function InputRow({ icon: Icon, label, hint, value, onChange, min, max, step, pr
 }
 
 /* ---------- A big stat tile ---------- */
-function Tile({ icon: Icon, label, children, tone = 'blue' }) {
-  const toneMap = {
-    blue: 'bg-bluesoft text-blue',
-    brand: 'bg-brand/10 text-brand',
-    green: 'bg-gGreen/10 text-gGreen'
-  };
+function Tile({ icon: Icon, label, children, chipBg, chipFg }) {
   return (
     <div className="bg-white rounded-2xl border border-line shadow-soft p-5 text-center sm:text-left">
       <div className="flex items-center gap-2 justify-center sm:justify-start">
-        <div className={`h-8 w-8 rounded-lg flex items-center justify-center ${toneMap[tone]}`}>
+        <div className="h-8 w-8 rounded-lg flex items-center justify-center" style={{ background: chipBg, color: chipFg }}>
           <Icon className="h-4 w-4" />
         </div>
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate2">{label}</div>
@@ -185,6 +184,32 @@ export default function Calculator() {
   const bePct = leadsN > 0 ? clamp((jobsToBreakEven / leadsN) * 100, 0, 100) : 0;
   const extraPct = 100 - bePct;
 
+  /* ---- Theme: cosmetic vertical (Aura) reskins to plum/mauve ---- */
+  const isCosmetic = trade.key === 'medspa';
+  const th = isCosmetic
+    ? {
+        accentDark: '#D796B4',                       // accent on the dark card (light mauve)
+        accent: '#9B5C7A',                           // accent on white
+        deep: '#7C4763',
+        sec: '#9B5C7A', secBg: '#F4E7EE',            // secondary (replaces blue)
+        accentChip: 'rgba(155,92,122,0.12)',
+        secChip: 'rgba(155,92,122,0.12)',
+        greenChip: 'rgba(94,129,104,0.12)', green: '#5E8168',
+        gradient: 'linear-gradient(to bottom right, #2E1E33, #241A28, #160E19)',
+        glow: '0 10px 40px -10px rgba(155,92,122,0.5)'
+      }
+    : {
+        accentDark: '#F37021',
+        accent: '#F37021',
+        deep: '#D85A0F',
+        sec: '#1E55C7', secBg: '#EAF1FE',
+        accentChip: 'rgba(243,112,33,0.12)',
+        secChip: 'rgba(30,85,199,0.12)',
+        greenChip: 'rgba(52,168,83,0.12)', green: '#34A853',
+        gradient: 'linear-gradient(to bottom right, #0A1B3D, #0F1A33, #06122B)',
+        glow: undefined
+      };
+
   return (
     <div className="min-h-screen bg-soft text-ink antialiased">
       {/* ---- Top bar ---- */}
@@ -213,11 +238,11 @@ export default function Calculator() {
       <main className="mx-auto max-w-6xl px-5 md:px-8 py-10 md:py-14">
         {/* ---- Heading ---- */}
         <div className="max-w-2xl">
-          <span className="eyebrow-light">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue" /> The math is simple
+          <span className="eyebrow-light" style={{ color: th.sec, background: th.secBg, borderColor: th.secChip }}>
+            <span className="h-1.5 w-1.5 rounded-full" style={{ background: th.sec }} /> The math is simple
           </span>
           <h1 className="h-display text-4xl md:text-5xl text-ink mt-4">
-            How many leads can we get you — and <span className="text-blue">how fast does it pay off?</span>
+            How many leads can we get you — and <span style={{ color: th.sec }}>how fast does it pay off?</span>
           </h1>
           <p className="mt-4 text-slate1 text-lg leading-relaxed">
             Pick your trade and your budget. We'll estimate the leads that budget brings in, and how few
@@ -242,8 +267,8 @@ export default function Calculator() {
             {/* Trade dropdown */}
             <div className="py-5 border-b border-line">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-10 w-10 shrink-0 rounded-lg bg-bluesoft flex items-center justify-center">
-                  <Scale className="h-5 w-5 text-blue" />
+                <div className="h-10 w-10 shrink-0 rounded-lg flex items-center justify-center" style={{ background: th.secBg }}>
+                  <Scale className="h-5 w-5" style={{ color: th.sec }} />
                 </div>
                 <div className="font-bold text-ink text-[15px]">What kind of work do you do?</div>
               </div>
@@ -263,17 +288,20 @@ export default function Calculator() {
             <InputRow
               icon={Wallet} label="What you spend a month" hint="Your monthly Google Ads budget"
               value={spend} onChange={setSpend} min={500} max={25000} step={100} prefix="$"
+              tint={th.secBg} iconColor={th.sec} sliderColor={th.accent}
             />
             <InputRow
-              icon={DollarSign} label="What one job is worth" hint={`Typical ${trade.label.toLowerCase()} job — edit to match yours`}
+              icon={DollarSign} label={isCosmetic ? 'What one visit is worth' : 'What one job is worth'}
+              hint={isCosmetic ? 'Average first visit — edit to match' : `Typical ${trade.label.toLowerCase()} job — edit to match yours`}
               value={jobValue} onChange={setJobValue} min={300} max={80000} step={250} prefix="$"
+              tint={th.secBg} iconColor={th.sec} sliderColor={th.accent}
             />
           </div>
 
           {/* RESULT */}
           <div className="lg:col-span-7 space-y-6">
             {/* Headline */}
-            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-navy via-charcoal to-navydeep text-white shadow-glow p-7 md:p-10">
+            <div className="relative rounded-2xl overflow-hidden text-white shadow-glow p-7 md:p-10" style={{ background: th.gradient }}>
               <div className="absolute inset-0 grid-bg-dark opacity-40" />
               <div className="relative">
                 <div className="text-xs font-bold uppercase tracking-widest text-white/60">
@@ -281,51 +309,52 @@ export default function Calculator() {
                 </div>
                 <div className="text-white/70 mt-3">We'd aim to bring you about</div>
                 <div className="flex items-end gap-3 mt-1">
-                  <div className="text-6xl md:text-7xl font-black text-brand leading-none flex items-end">
+                  <div className="text-6xl md:text-7xl font-black leading-none flex items-end" style={{ color: th.accentDark }}>
                     <AnimatedValue value={leadsLo} format={whole} />
                     <span className="text-white/40 mx-1">–</span>
                     <AnimatedValue value={leadsHi} format={whole} />
                   </div>
-                  <div className="text-2xl md:text-3xl font-black text-white mb-1">leads<span className="text-white/50 text-lg font-bold">/mo</span></div>
+                  <div className="text-2xl md:text-3xl font-black text-white mb-1">{isCosmetic ? 'enquiries' : 'leads'}<span className="text-white/50 text-lg font-bold">/mo</span></div>
                 </div>
                 <div className="text-[12px] text-white/45 mt-2">
-                  Based on {trade.label.toLowerCase()} leads at about {money(trade.cplLo)}–{money(trade.cplHi)} each on Google Ads
+                  Based on {trade.label.toLowerCase()} {isCosmetic ? 'enquiries' : 'leads'} at about {money(trade.cplLo)}–{money(trade.cplHi)} each on Google Ads
                 </div>
 
                 <div className="text-white/75 mt-5 text-lg leading-relaxed max-w-xl">
                   {feasible ? (
-                    <>You'd only need to close <span className="font-bold text-brand">{whole(jobsToBreakEven)}</span> of
+                    <>You'd only need to {isCosmetic ? 'book' : 'close'} <span className="font-bold" style={{ color: th.accentDark }}>{whole(jobsToBreakEven)}</span> of
                     them to make your <span className="font-bold text-white">{money(spend)}</span> back.</>
                   ) : (
-                    <>At this job size you'd need <span className="font-bold text-brand">{whole(jobsToBreakEven)}</span> jobs
-                    to make your <span className="font-bold text-white">{money(spend)}</span> back — worth raising the budget or targeting bigger jobs.</>
+                    <>At this {isCosmetic ? 'visit' : 'job'} size you'd need <span className="font-bold" style={{ color: th.accentDark }}>{whole(jobsToBreakEven)}</span> {isCosmetic ? 'clients' : 'jobs'}
+                    to make your <span className="font-bold text-white">{money(spend)}</span> back — worth raising the budget or targeting bigger {isCosmetic ? 'treatments' : 'jobs'}.</>
                   )}
                 </div>
 
                 {/* Leads bar */}
                 <div className="mt-8">
                   <div className="flex justify-between text-[11px] font-semibold text-white/55 mb-2">
-                    <span>Your ~{whole(leadsN)} leads this month</span>
+                    <span>Your ~{whole(leadsN)} {isCosmetic ? 'enquiries' : 'leads'} this month</span>
                     <span>{feasible ? `${whole(extraJobs)} left over` : 'need more leads'}</span>
                   </div>
                   <div className="h-5 rounded-full bg-white/10 overflow-hidden flex">
                     <motion.div className="h-full bg-white/35"
                       animate={{ width: `${bePct}%` }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} />
-                    <motion.div className="h-full bg-gradient-to-r from-brand to-branddeep"
+                    <motion.div className="h-full" style={{ background: `linear-gradient(to right, ${th.accentDark}, ${th.deep})` }}
                       animate={{ width: `${extraPct}%` }} transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }} />
                   </div>
                   <div className="flex justify-between text-[11px] mt-2">
                     <span className="text-white/55">■ Pays back your spend</span>
-                    <span className="text-brand font-semibold">■ Every extra job = more money</span>
+                    <span className="font-semibold" style={{ color: th.accentDark }}>■ Every extra {isCosmetic ? 'client' : 'job'} = more money</span>
                   </div>
                 </div>
 
                 {/* Punch line */}
                 <div className="mt-7 flex items-start gap-2.5 rounded-xl bg-white/5 border border-white/10 px-4 py-3.5">
-                  <Sparkles className="h-5 w-5 text-brand shrink-0 mt-0.5" />
+                  <Sparkles className="h-5 w-5 shrink-0 mt-0.5" style={{ color: th.accentDark }} />
                   <p className="text-white/85 leading-snug">
-                    Every job you close is worth about{' '}
-                    <span className="font-black text-white">{money(jobValue)}</span> — the rest is upside.
+                    Every {isCosmetic ? 'client you book' : 'job you close'} is worth about{' '}
+                    <span className="font-black text-white">{money(jobValue)}</span>
+                    {isCosmetic ? <> the first visit — and far more once they come back.</> : <> — the rest is upside.</>}
                   </p>
                 </div>
               </div>
@@ -333,13 +362,13 @@ export default function Calculator() {
 
             {/* Simple stat tiles */}
             <div className="grid grid-cols-3 gap-3 sm:gap-4">
-              <Tile icon={Users} tone="brand" label="Leads a month">
+              <Tile icon={Users} chipBg={th.accentChip} chipFg={th.accent} label={isCosmetic ? 'Enquiries a month' : 'Leads a month'}>
                 <AnimatedValue value={leadsLo} format={whole} />–<AnimatedValue value={leadsHi} format={whole} />
               </Tile>
-              <Tile icon={Scale} tone="blue" label="Jobs to break even">
+              <Tile icon={Scale} chipBg={th.secChip} chipFg={th.sec} label={isCosmetic ? 'Clients to break even' : 'Jobs to break even'}>
                 <AnimatedValue value={jobsToBreakEven} format={whole} />
               </Tile>
-              <Tile icon={DollarSign} tone="green" label="Each job worth">
+              <Tile icon={DollarSign} chipBg={th.greenChip} chipFg={th.green} label={isCosmetic ? 'Each visit worth' : 'Each job worth'}>
                 <AnimatedValue value={jobValue} format={money} />
               </Tile>
             </div>
@@ -348,11 +377,11 @@ export default function Calculator() {
             <div className="rounded-2xl bg-white border border-line shadow-soft p-6 md:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div className="font-display font-extrabold text-lg text-ink flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-brand" /> Want us to bring you those leads?
+                  <Sparkles className="h-5 w-5" style={{ color: th.accent }} /> Want us to bring you those {isCosmetic ? 'clients' : 'leads'}?
                 </div>
                 <p className="text-slate1 text-sm mt-1">Start with a free audit — no obligation, no pressure.</p>
               </div>
-              <a href="/#audit" className="btn-primary shrink-0">
+              <a href="/#audit" className="btn-primary shrink-0" style={{ backgroundColor: th.accent, boxShadow: th.glow }}>
                 Get a Free Audit <ArrowRight className="h-4 w-4" />
               </a>
             </div>
