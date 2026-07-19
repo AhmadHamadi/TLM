@@ -55,7 +55,9 @@ const TRADES = [
   { key: 'cleaning',   label: 'Cleaning / Janitorial',   cplLo: 30,  cplHi: 100, job: 500 },
   { key: 'handyman',   label: 'Handyman',                cplLo: 35,  cplHi: 90,  job: 450 },
   // Cosmetic vertical. CPL = enquiry cost (CPC $5.75–8.25 ÷ 10% landing-page
-  // conversion); job = average first visit. Selecting this reskins the calculator.
+  // conversion). job = average med-spa first visit — 2026 averages: Botox appt
+  // ~$350–583, dermal filler ~$750/syringe, lip ~$650 (RealSelf/AmSpa; Ontario
+  // CAD ~$500–600). Selecting this reskins the calculator.
   { key: 'medspa',     label: 'Cosmetic / Med Spa (injectables)', cplLo: 58, cplHi: 83, job: 550 }
 ];
 
@@ -372,6 +374,19 @@ export default function Calculator() {
                 <AnimatedValue value={jobValue} format={money} />
               </Tile>
             </div>
+
+            {isCosmetic && (
+              <div className="rounded-2xl bg-white border border-line shadow-soft p-5 text-sm text-slate1">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-slate2 mb-2">Typical med-spa prices · 2026</div>
+                <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+                  <span><span className="font-bold text-ink">Botox</span> ~$350–$583 / visit</span>
+                  <span><span className="font-bold text-ink">Dermal filler</span> ~$750 / syringe</span>
+                  <span><span className="font-bold text-ink">Lip filler</span> ~$650</span>
+                  <span><span className="font-bold text-ink">Sculptra</span> ~$900 / vial</span>
+                </div>
+                <div className="text-xs text-slate2 mt-2">Set "what one visit is worth" above to match the clinic's real average.</div>
+              </div>
+            )}
 
             {/* CTA */}
             <div className="rounded-2xl bg-white border border-line shadow-soft p-6 md:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
