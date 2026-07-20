@@ -140,7 +140,6 @@ function Navbar() {
     { href: '#results',      label: 'Results' },
     { href: '#testimonials', label: 'Testimonials' },
     { href: '#process',      label: 'Process' },
-    { href: '#packages',     label: 'Packages' },
     { href: '#faq',          label: 'FAQ' }
   ];
 
@@ -326,8 +325,8 @@ function Hero() {
               <a href="#audit" className="btn-primary animate-pulseGlow">
                 Get a Free Marketing Audit <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#packages" className="btn-ghost-light">
-                View Our Packages
+              <a href="#results" className="btn-ghost-light">
+                See Real Results
               </a>
             </motion.div>
 
@@ -1007,229 +1006,6 @@ function Process() {
 }
 
 /* ============================================================
-   PACKAGES — 3 service tiers, no public pricing, middle is featured
-   ============================================================ */
-function Packages() {
-  const packages = [
-    {
-      name: 'Google Ads Lead Launch',
-      tag: 'Fastest path to leads',
-      icon: Target,
-      tone: 'blue',
-      desc: 'For contractors who want to start generating quote requests quickly with Google Ads and a dedicated landing page.',
-      features: [
-        '1 conversion-focused landing page',
-        'Google Ads campaign setup',
-        'Monthly Google Ads management',
-        'Ongoing campaign optimization based on lead and conversion data',
-        'Keyword research',
-        'Negative keyword optimization',
-        'Ad copywriting',
-        'Call and form tracking',
-        'Monthly lead report'
-      ],
-      excluded: [
-        'Full website rebuild',
-        'SEO management',
-        'Google Business Profile management'
-      ],
-      cta: 'Learn More'
-    },
-    {
-      name: 'Google Growth System',
-      tag: 'Everything in one · Best value',
-      icon: Sparkles,
-      tone: 'brand',
-      featured: true,
-      desc: 'The complete Google lead system. Combines everything from the other two packages plus blogs, content updates, and full performance tracking. Website, Google Ads, SEO, Google Business Profile, content, and ongoing optimization, all under one roof.',
-      features: [
-        'Full contractor website build',
-        'Conversion-focused landing pages',
-        'Google Ads campaign setup',
-        'Monthly Google Ads management',
-        'Ongoing Google Ads optimization based on lead and conversion data',
-        'Keyword research',
-        'Negative keyword optimization',
-        'Ad copywriting',
-        'SEO setup and monthly SEO management',
-        'Google Business Profile setup and optimization',
-        'Monthly GBP updates',
-        'Review strategy',
-        'Blog, FAQ, and content updates',
-        'Search Console and Analytics setup',
-        'Call and form tracking',
-        'Lead quality review',
-        'Monthly performance reporting'
-      ],
-      excluded: [],
-      cta: 'Request Package Details'
-    },
-    {
-      name: 'SEO Website Growth',
-      tag: 'Long-term organic growth',
-      icon: Search,
-      tone: 'blue',
-      desc: 'For contractors who want a better website and stronger organic/local Google visibility without paid ads.',
-      features: [
-        'Full website rebuild',
-        'SEO setup',
-        'Monthly SEO management',
-        'Google Business Profile optimization',
-        'Monthly GBP updates',
-        'Blog, FAQ, and content updates',
-        'Search Console and Analytics setup',
-        'Call and form tracking',
-        'Monthly SEO report'
-      ],
-      excluded: [
-        'Google Ads setup',
-        'Google Ads management',
-        'Paid campaign tracking'
-      ],
-      cta: 'Learn More'
-    }
-  ];
-
-  return (
-    <Section id="packages" className="bg-soft">
-      <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-14 max-w-3xl mx-auto">
-        <motion.span variants={fadeUp} className="eyebrow-light">Service Packages</motion.span>
-        <motion.h2 variants={fadeUp} className="h-display text-4xl md:text-5xl text-ink mt-4">
-          Choose the Right Growth System for<br className="hidden md:block" />
-          <span className="text-blue">Your Contracting Business</span>
-        </motion.h2>
-        <motion.p variants={fadeUp} className="mt-5 text-slate1 text-lg leading-relaxed">
-          Whether you need fast Google Ads leads, long-term SEO growth, or the full system, we build packages around quote requests, booked estimates, and real contractor growth.
-        </motion.p>
-      </motion.div>
-
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={stagger}
-        className="grid lg:grid-cols-3 gap-6 lg:gap-5 items-stretch"
-      >
-        {packages.map((p) => {
-          const Icon = p.icon;
-          const featured = p.featured;
-          return (
-            <motion.div
-              key={p.name}
-              variants={fadeUp}
-              whileHover={{ y: -6 }}
-              className={`relative flex flex-col rounded-2xl transition-all duration-300 ${
-                featured
-                  ? 'bg-gradient-to-br from-navy via-charcoal to-navydeep text-white border-2 border-brand shadow-glow lg:-mt-4 lg:mb-0 lg:scale-[1.02] z-10'
-                  : 'bg-white border border-line shadow-soft hover:shadow-lifted hover:border-blue/30'
-              }`}
-            >
-              {featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                  <div className="bg-brand text-white text-[10px] font-extrabold uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-glow flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3" /> Recommended
-                  </div>
-                </div>
-              )}
-
-              <div className="p-7 md:p-8 flex flex-col flex-1">
-                {/* Header */}
-                <div className="flex items-start gap-3">
-                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center shrink-0 ${
-                    featured
-                      ? 'bg-brand/20 border border-brand/40'
-                      : p.tone === 'blue'
-                        ? 'bg-bluesoft border border-blue/20'
-                        : 'bg-brand/10 border border-brand/20'
-                  }`}>
-                    <Icon className={`h-5 w-5 ${
-                      featured ? 'text-brand' : p.tone === 'blue' ? 'text-blue' : 'text-brand'
-                    }`} />
-                  </div>
-                  <div>
-                    <div className={`text-[10px] font-bold uppercase tracking-widest ${
-                      featured ? 'text-brand' : 'text-slate2'
-                    }`}>
-                      {p.tag}
-                    </div>
-                    <h3 className={`font-display font-extrabold text-xl mt-0.5 ${featured ? 'text-white' : 'text-ink'}`}>
-                      {p.name}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className={`mt-5 leading-relaxed ${featured ? 'text-white/75' : 'text-slate1'}`}>
-                  {p.desc}
-                </p>
-
-                {/* Divider */}
-                <div className={`my-6 h-px ${featured ? 'bg-white/15' : 'bg-line'}`} />
-
-                {/* Features */}
-                <ul className="space-y-2.5 flex-1">
-                  {p.features.map((f) => (
-                    <li key={f} className={`flex items-start gap-2.5 text-sm ${featured ? 'text-white/90' : 'text-ink'}`}>
-                      <CheckCircle2 className={`h-4 w-4 shrink-0 mt-0.5 ${featured ? 'text-brand' : 'text-gGreen'}`} />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Excluded */}
-                {p.excluded.length > 0 && (
-                  <>
-                    <div className={`mt-6 mb-3 text-[10px] font-bold uppercase tracking-widest ${featured ? 'text-white/40' : 'text-slate3'}`}>
-                      Not included
-                    </div>
-                    <ul className="space-y-2">
-                      {p.excluded.map((e) => (
-                        <li key={e} className={`flex items-start gap-2.5 text-xs ${featured ? 'text-white/45' : 'text-slate3'}`}>
-                          <XCircle className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${featured ? 'text-white/30' : 'text-slate3'}`} />
-                          <span>{e}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-
-                {/* CTA */}
-                <a
-                  href="#audit"
-                  className={`mt-7 inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold transition-all duration-200 ${
-                    featured
-                      ? 'bg-brand text-white shadow-glow hover:bg-branddeep hover:scale-[1.02] animate-pulseGlow'
-                      : 'border border-line bg-white text-ink hover:border-blue/40 hover:text-blue'
-                  }`}
-                >
-                  {p.cta} <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
-            </motion.div>
-          );
-        })}
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        className="mt-12 text-center"
-      >
-        <p className="text-slate1">
-          Not sure which package fits?{' '}
-          <a href="#audit" className="text-blue font-semibold hover:underline">
-            Tell us about your business
-          </a>{' '}
-          and we'll recommend the right starting point.
-        </p>
-      </motion.div>
-    </Section>
-  );
-}
-
-/* ============================================================
    CONTACT FORM — sends via /api/lead → SMTP → info@tradeleadsmarketing.com
    ============================================================ */
 function ContactForm() {
@@ -1538,7 +1314,7 @@ function Footer() {
           <div className="md:col-span-2">
             <div className="text-xs uppercase tracking-widest text-white/45 mb-4">Sitemap</div>
             <ul className="space-y-2">
-              {[['Packages','#packages'], ['Results','#results'], ['Process','#process'], ['FAQ','#faq'], ['Get Audit','#audit']].map(([l, h]) => (
+              {[['Results','#results'], ['Process','#process'], ['FAQ','#faq'], ['Get Audit','#audit']].map(([l, h]) => (
                 <li key={l}><a href={h} className="text-white/70 hover:text-brand transition-colors">{l}</a></li>
               ))}
             </ul>
@@ -1601,7 +1377,6 @@ export default function App() {
         <Testimonials />
         <WhyUs />
         <Process />
-        <Packages />
         <FAQ />
         <ContactForm />
       </main>
